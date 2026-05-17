@@ -28,6 +28,13 @@
                             700: '#9c7727',
                             800: '#7f5f22',
                             900: '#684e1e',
+                        },
+                        silver: {
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
                         }
                     }
                 }
@@ -56,17 +63,28 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
-        /* Animação suave para as ondas de áudio simuladas */
-        @keyframes sound-wave {
-            0%, 100% { height: 4px; }
-            50% { height: 16px; }
+        /* Efeito de Brilho Metálico Animado para os Planos */
+        @keyframes shine {
+            100% { left: 125%; }
         }
-        .audio-bar {
-            animation: sound-wave 1.2s ease-in-out infinite;
+        .shine-effect {
+            position: relative;
+            overflow: hidden;
         }
-        .audio-bar:nth-child(2) { animation-delay: 0.15s; }
-        .audio-bar:nth-child(3) { animation-delay: 0.3s; }
-        .audio-bar:nth-child(4) { animation-delay: 0.45s; }
+        .shine-effect::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -75%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.3) 100%);
+            transform: skewX(-25deg);
+            transition: 0.75s;
+        }
+        .shine-effect:hover::after {
+            animation: shine 1s ease;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 selection:bg-indigo-600 selection:text-white overflow-x-hidden font-sans">
@@ -85,7 +103,7 @@
                 <a href="#beneficios" class="hover:text-indigo-600 transition">Diferenciais</a>
                 <a href="#modelos" class="hover:text-indigo-600 transition">Modelos Premium</a>
                 <a href="#precos" class="hover:text-indigo-600 transition">Preços</a>
-                <a href="#faq" class="hover:text-indigo-600 transition">Dúvidas</a>
+                <a href="#faq" class="hover:text-indigo-600 transition">Dúvidas Detalhadas</a>
             </nav>
 
             <a href="https://wa.me/5561984672596?text=Olá!%20Achei%20o%20site%20da%20T4B%20muito%20lindo%20e%20gostaria%20de%20criar%20um%20convite%20digital%20interativo!" 
@@ -110,7 +128,7 @@
                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300">Link Interativo Exclusivo</span>
             </h1>
             <p class="text-base md:text-xl text-slate-300 mb-10 max-w-3xl mx-auto leading-relaxed font-normal">
-                Esqueça PDFs estáticos sem graça e convites tradicionais frios. Encante seus convidados com confirmação de presença dinâmica, rotas de GPS direto no Waze/Maps, listas de presentes seguras e PIX de forma simplificada.
+                Substitua papéis caros e PDFs estáticos sem graça. Encante seus convidados com confirmação de presença automática, rotas diretas de GPS, galeria de fotos integradas, mural de recados interativo e recebimento de presentes via PIX.
             </p>
             <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
                 <a href="#modelos" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-lg py-4 px-10 rounded-2xl shadow-xl shadow-indigo-600/30 transition duration-300 transform hover:-translate-y-1 text-center">
@@ -131,7 +149,7 @@
             <div class="text-center mb-16">
                 <span class="text-indigo-600 font-bold text-xs uppercase tracking-widest">Por que escolher a T4B?</span>
                 <h2 class="text-3xl font-extrabold mt-2 text-slate-900">A Tecnologia Ideal para Qualquer Evento</h2>
-                <p class="text-slate-600 mt-3 max-w-xl mx-auto text-sm md:text-base leading-relaxed">Garantimos a melhor experiência do mercado para os organizadores do evento e também para seus convidados.</p>
+                <p class="text-slate-600 mt-3 max-w-xl mx-auto text-sm md:text-base leading-relaxed">Garantimos a melhor experiência do mercado para você e para as pessoas mais importantes da sua vida.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
@@ -141,15 +159,15 @@
                         <i class="fas fa-location-dot"></i>
                     </div>
                     <h3 class="font-bold text-lg mb-2 text-slate-900">Rotas Integradas</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed font-medium">Seu convidado abre o Waze ou o Google Maps com um clique de dentro do próprio convite.</p>
+                    <p class="text-slate-600 text-sm leading-relaxed font-medium">Seu convidado abre o Waze ou o Google Maps com um clique, sem errar o caminho do evento.</p>
                 </div>
                 <!-- Benefício 2 -->
                 <div class="bg-slate-50 p-8 rounded-3xl border border-slate-200/60 hover:border-indigo-200 hover:bg-indigo-50/20 transition duration-300">
                     <div class="w-12 h-12 bg-pink-100 text-pink-600 rounded-2xl flex items-center justify-center text-xl mb-6">
                         <i class="fas fa-calendar-check"></i>
                     </div>
-                    <h3 class="font-bold text-lg mb-2 text-slate-900">RSVP Automatizado</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed font-medium">Acompanhe a lista de confirmados recebendo mensagens estruturadas direto no seu celular.</p>
+                    <h3 class="font-bold text-lg mb-2 text-slate-900">RSVP Inteligente</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed font-medium">Acompanhe a lista de confirmados recebendo mensagens organizadas direto no seu celular.</p>
                 </div>
                 <!-- Benefício 3 -->
                 <div class="bg-slate-50 p-8 rounded-3xl border border-slate-200/60 hover:border-indigo-200 hover:bg-indigo-50/20 transition duration-300">
@@ -157,27 +175,27 @@
                         <i class="fas fa-hand-holding-dollar"></i>
                     </div>
                     <h3 class="font-bold text-lg mb-2 text-slate-900">PIX Copia e Cola</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed font-medium">Torne a contribuição de presentes super simples, rápida e extremamente elegante.</p>
+                    <p class="text-slate-600 text-sm leading-relaxed font-medium">Receba presentes em dinheiro diretamente na sua conta, de maneira discreta, segura e muito elegante.</p>
                 </div>
                 <!-- Benefício 4 -->
                 <div class="bg-slate-50 p-8 rounded-3xl border border-slate-200/60 hover:border-indigo-200 hover:bg-indigo-50/20 transition duration-300">
                     <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center text-xl mb-6">
-                        <i class="fas fa-music"></i>
+                        <i class="fas fa-images"></i>
                     </div>
-                    <h3 class="font-bold text-lg mb-2 text-slate-900">Trilha Sonora</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed font-medium">Adicione a trilha sonora ideal para emocionar e preparar seus convidados desde o primeiro segundo.</p>
+                    <h3 class="font-bold text-lg mb-2 text-slate-900">Álbum de Fotos</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed font-medium">Compartilhe um lindo carrossel com fotos do casal, do aniversariante ou do formando com design clean.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- VITRINE DE MODELOS COM FOTOS REAIS -->
+    <!-- VITRINE DE MODELOS COM IMAGENS INTEGRADAS -->
     <section id="modelos" class="py-20 bg-slate-100/70 border-y border-slate-200/50">
         <div class="container mx-auto px-4 md:px-8 max-w-6xl">
             <div class="text-center mb-16">
-                <span class="text-indigo-600 font-bold text-xs uppercase tracking-widest">Modelos em Destaque</span>
+                <span class="text-indigo-600 font-bold text-xs uppercase tracking-widest">Modelos Interativos Disponíveis</span>
                 <h2 class="text-3xl font-extrabold mt-2 text-slate-900">Nossos Modelos Premium</h2>
-                <p class="text-slate-600 mt-3 max-w-2xl mx-auto text-sm md:text-base leading-relaxed">Clique em um dos botões abaixo para abrir o celular interativo e testar a riqueza de detalhes e recursos.</p>
+                <p class="text-slate-600 mt-3 max-w-2xl mx-auto text-sm md:text-base leading-relaxed">Clique no botão de simulação para ver o convite funcionando dentro do celular interativo com todas as suas funções.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -187,8 +205,9 @@
                     <div class="relative overflow-hidden h-64 bg-slate-200">
                         <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=600" 
                              alt="Elegante casamento com flores" 
-                             class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        <span class="absolute top-4 right-4 bg-rose-600 text-white text-[10px] font-bold tracking-widest uppercase px-3.5 py-1.5 rounded-full shadow-md">O Mais Vendido</span>
+                             class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                             onerror="this.src='https://placehold.co/600x400/f3e8ff/a855f7?text=Classic+Wedding'">
+                        <span class="absolute top-4 right-4 bg-rose-600 text-white text-[10px] font-bold tracking-widest uppercase px-3.5 py-1.5 rounded-full shadow-md">Campeão de Vendas</span>
                     </div>
                     <div class="p-8">
                         <div class="flex items-center gap-2 mb-2">
@@ -196,13 +215,13 @@
                             <span class="text-xs font-bold text-rose-500 uppercase tracking-wider">Casamentos & Noivados</span>
                         </div>
                         <h3 class="text-xl font-extrabold text-slate-900 mb-3">Classic Wedding Rose</h3>
-                        <p class="text-slate-600 text-sm mb-6 leading-relaxed">Minimalismo caligráfico, paleta rosé gold, manual dos padrinhos, mapa interativo e contagem regressiva viva.</p>
+                        <p class="text-slate-600 text-sm mb-6 leading-relaxed">Design caligráfico impecável, paleta de cores personalizada, manual completo dos padrinhos, mapa interativo e cronômetro.</p>
                         
                         <div class="border-t border-slate-200 pt-5 space-y-2">
-                            <p class="text-xs font-bold text-slate-800 uppercase tracking-wider">Recursos Premium Inclusos:</p>
+                            <p class="text-xs font-bold text-slate-800 uppercase tracking-wider">Recursos Disponíveis:</p>
                             <div class="grid grid-cols-2 gap-y-2 text-xs font-medium text-slate-600">
-                                <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Música de Fundo</span>
-                                <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Manual dos Padrinhos</span>
+                                <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Carrossel de Fotos</span>
+                                <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Mural de Recados</span>
                                 <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Lista em PIX Integrada</span>
                                 <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Cronômetro Vivo</span>
                             </div>
@@ -220,24 +239,25 @@
                     <div class="relative overflow-hidden h-64 bg-slate-200">
                         <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&q=80&w=600" 
                              alt="Decoração infantil alegre" 
-                             class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        <span class="absolute top-4 right-4 bg-emerald-600 text-white text-[10px] font-bold tracking-widest uppercase px-3.5 py-1.5 rounded-full shadow-md">Super Divertido</span>
+                             class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                             onerror="this.src='https://placehold.co/600x400/ecfdf5/059669?text=Safari+Kids'">
+                        <span class="absolute top-4 right-4 bg-emerald-600 text-white text-[10px] font-bold tracking-widest uppercase px-3.5 py-1.5 rounded-full shadow-md">Super Alegre</span>
                     </div>
                     <div class="p-8">
                         <div class="flex items-center gap-2 mb-2">
                             <i class="fas fa-paw text-emerald-500"></i>
-                            <span class="text-xs font-bold text-emerald-500 uppercase tracking-wider">Aniversários de Criança</span>
+                            <span class="text-xs font-bold text-emerald-500 uppercase tracking-wider">Aniversários Infantis</span>
                         </div>
                         <h3 class="text-xl font-extrabold text-slate-900 mb-3">Safari Aventuras</h3>
-                        <p class="text-slate-600 text-sm mb-6 leading-relaxed">Cores vibrantes, ilustrações lúdicas, cronograma completo das brincadeiras e sugestões de presentes com tamanhos.</p>
+                        <p class="text-slate-600 text-sm mb-6 leading-relaxed">Estilo visual lúdico com bichinhos fofos, cronograma dinâmico de brincadeiras e painel com as sugestões de presentes da criança.</p>
                         
                         <div class="border-t border-slate-200 pt-5 space-y-2">
-                            <p class="text-xs font-bold text-slate-800 uppercase tracking-wider">Recursos Premium Inclusos:</p>
+                            <p class="text-xs font-bold text-slate-800 uppercase tracking-wider">Recursos Disponíveis:</p>
                             <div class="grid grid-cols-2 gap-y-2 text-xs font-medium text-slate-600">
-                                <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Lista de Presentes</span>
-                                <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Cronograma de Atrações</span>
-                                <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Confirmação RSVP</span>
-                                <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Dicas de Vestuário</span>
+                                <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Trajes Sugeridos</span>
+                                <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Guia do Evento</span>
+                                <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Confirmador RSVP</span>
+                                <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Mural de Votos</span>
                             </div>
                         </div>
                     </div>
@@ -253,24 +273,25 @@
                     <div class="relative overflow-hidden h-64 bg-slate-200">
                         <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&q=80&w=600" 
                              alt="Evento de gala" 
-                             class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                        <span class="absolute top-4 right-4 bg-amber-500 text-white text-[10px] font-bold tracking-widest uppercase px-3.5 py-1.5 rounded-full shadow-md">Elegância Máxima</span>
+                             class="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+                             onerror="this.src='https://placehold.co/600x400/fffbeb/d97706?text=Luxury+Gala'">
+                        <span class="absolute top-4 right-4 bg-amber-500 text-white text-[10px] font-bold tracking-widest uppercase px-3.5 py-1.5 rounded-full shadow-md">Alto Luxo</span>
                     </div>
                     <div class="p-8">
                         <div class="flex items-center gap-2 mb-2">
                             <i class="fas fa-graduation-cap text-amber-500"></i>
-                            <span class="text-xs font-bold text-amber-500 uppercase tracking-wider">Formatura & Festas Elegantes</span>
+                            <span class="text-xs font-bold text-amber-500 uppercase tracking-wider">Formaturas & Celebrações VIP</span>
                         </div>
                         <h3 class="text-xl font-extrabold text-slate-900 mb-3">Gala Luxury & Black Gold</h3>
-                        <p class="text-slate-600 text-sm mb-6 leading-relaxed">Design refinado em preto e dourado com controle de abas para cronogramas, traje sugerido e localização VIP.</p>
+                        <p class="text-slate-600 text-sm mb-6 leading-relaxed">Uma verdadeira joia digital em tons pretos e dourados, ideal para comemorar marcos de carreira com elegância e requinte máximo.</p>
                         
                         <div class="border-t border-slate-200 pt-5 space-y-2">
-                            <p class="text-xs font-bold text-slate-800 uppercase tracking-wider">Recursos Premium Inclusos:</p>
+                            <p class="text-xs font-bold text-slate-800 uppercase tracking-wider">Recursos Disponíveis:</p>
                             <div class="grid grid-cols-2 gap-y-2 text-xs font-medium text-slate-600">
                                 <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Abas de Conteúdo</span>
                                 <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Dress Code Social</span>
                                 <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> RSVP Integrado</span>
-                                <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Sugestão de Hotéis</span>
+                                <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Guia de Acesso</span>
                             </div>
                         </div>
                     </div>
@@ -289,7 +310,7 @@
     <div id="modalSimulador" class="opacity-0 pointer-events-none fixed inset-0 flex items-center justify-center z-50 transition-all duration-300">
         <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-md" onclick="fecharSimulador()"></div>
         
-        <div class="relative bg-slate-950 w-[350px] h-[720px] rounded-[52px] border-[12px] border-slate-800 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] z-50 overflow-hidden flex flex-col transform scale-90 md:scale-100 transition-transform duration-300">
+        <div class="relative bg-slate-950 w-[355px] h-[730px] rounded-[52px] border-[12px] border-slate-800 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] z-50 overflow-hidden flex flex-col transform scale-90 md:scale-100 transition-transform duration-300">
             <!-- Ilha Dinâmica -->
             <div class="absolute top-2.5 left-1/2 transform -translate-x-1/2 w-28 h-5.5 bg-slate-800 rounded-full z-50 flex items-center justify-center">
                 <div class="w-2 h-2 bg-indigo-900 rounded-full mr-2"></div>
@@ -298,7 +319,7 @@
 
             <!-- Tela de Display do Smartphone -->
             <div id="telaSmartphone" class="flex-grow overflow-y-auto bg-white pt-10 pb-4 px-4 no-scrollbar">
-                <!-- Conteúdo dinâmico -->
+                <!-- Conteúdo dinâmico será inserido via JS -->
             </div>
 
             <!-- Rodapé Home Bar -->
@@ -336,8 +357,8 @@
                     <div class="w-16 h-16 bg-indigo-600 text-white font-extrabold text-lg rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-600/20 mb-6">
                         01
                     </div>
-                    <h3 class="font-bold text-lg mb-2 text-slate-900">Defina os Detalhes</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed px-4 font-medium">Fale conosco pelo WhatsApp, envie as informações básicas do evento e escolha seu modelo favorito.</p>
+                    <h3 class="font-bold text-lg mb-2 text-slate-900">Envie Seus Dados</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed px-4 font-medium">Basta entrar em contato pelo WhatsApp, enviar as fotos preferidas e detalhes do evento.</p>
                 </div>
 
                 <!-- Passo 2 -->
@@ -345,8 +366,8 @@
                     <div class="w-16 h-16 bg-indigo-600 text-white font-extrabold text-lg rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-600/20 mb-6">
                         02
                     </div>
-                    <h3 class="font-bold text-lg mb-2 text-slate-900">Montagem Personalizada</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed px-4 font-medium">Nossa equipe insere suas fotos, escolhe a música ideal, configura as rotas exatas de GPS e sua chave PIX de presentes.</p>
+                    <h3 class="font-bold text-lg mb-2 text-slate-900">Nossa Equipe Cria</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed px-4 font-medium">Personalizamos o layout com o seu estilo, inserimos o carrossel de fotos, cronômetro e canais de presença.</p>
                 </div>
 
                 <!-- Passo 3 -->
@@ -354,113 +375,149 @@
                     <div class="w-16 h-16 bg-indigo-600 text-white font-extrabold text-lg rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-600/20 mb-6">
                         03
                     </div>
-                    <h3 class="font-bold text-lg mb-2 text-slate-900">Seu Link está no Ar!</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed px-4 font-medium">Você recebe o link exclusivo da T4B para enviar por WhatsApp ou incorporar em um QR Code de forma ilimitada.</p>
+                    <h3 class="font-bold text-lg mb-2 text-slate-900">Seu Link Exclusivo</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed px-4 font-medium">Você recebe o link otimizado da T4B para disparar de forma ilimitada para todos os seus convidados.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- TABELA DE PREÇOS -->
-    <section id="precos" class="py-20 bg-slate-50">
+    <!-- TABELA DE PREÇOS COM ELEMENTOS DE CONTAGEM E BRILHO METÁLICO -->
+    <section id="precos" class="py-20 bg-slate-100/50">
         <div class="container mx-auto px-4 md:px-8 max-w-5xl">
             <div class="text-center mb-16">
                 <span class="text-indigo-600 font-bold text-xs uppercase tracking-widest">Preço Justo e Transparente</span>
-                <h2 class="text-3xl font-extrabold mt-2 text-slate-900">Nossos Planos Promocionais</h2>
-                <p class="text-slate-600 mt-2 text-sm md:text-base leading-relaxed">Invista em tecnologia que otimiza sua festa e gera economia.</p>
+                <h2 class="text-3xl font-extrabold mt-2 text-slate-900">Planos com Condição Promocional</h2>
+                <p class="text-slate-600 mt-2 text-sm md:text-base leading-relaxed">Escolha a melhor experiência para surpreender seus convidados de uma vez por todas.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-                <!-- Plano Essencial -->
-                <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-md flex flex-col justify-between">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-4xl mx-auto items-stretch">
+                <!-- Plano Silver (Prata Lendário Brilhante) -->
+                <div class="shine-effect bg-gradient-to-br from-slate-100 via-zinc-200 to-slate-200 hover:scale-[1.03] transition duration-300 p-8 rounded-[36px] border-4 border-slate-300 shadow-xl flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute -top-3 -right-3 w-20 h-20 bg-slate-300/30 rounded-full blur-xl"></div>
                     <div>
-                        <span class="text-slate-500 text-xs font-bold tracking-widest uppercase">Plano Silver</span>
-                        <h3 class="text-2xl font-black text-slate-900 mt-1">Convite Prático</h3>
-                        <p class="text-slate-500 text-sm mt-2">Perfeito para quem quer praticidade sem abrir mão de um design limpo e moderno.</p>
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span class="text-slate-600 text-xs font-black tracking-wider uppercase block">PLANO LENDÁRIO</span>
+                                <h3 class="text-2xl font-black text-slate-800 mt-1">Prata Silver</h3>
+                            </div>
+                            <span class="bg-slate-400/20 border border-slate-400 text-slate-700 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">Essencial Chic</span>
+                        </div>
+                        <p class="text-slate-600 text-sm mt-3 leading-relaxed">Excelente custo-benefício para quem deseja um convite interativo direto ao ponto com design impecável e limpo.</p>
                         
-                        <div class="my-6">
-                            <span class="text-3xl font-black text-slate-900">R$ 89,90</span>
-                            <span class="text-slate-400 text-xs font-semibold block mt-1">Pagamento Único, sem mensalidade</span>
+                        <div class="my-6 bg-white/70 rounded-2xl p-4 border border-slate-300/40">
+                            <span class="text-4xl font-black text-slate-800">R$ 89,90</span>
+                            <span class="text-slate-500 text-xs font-semibold block mt-1"><i class="fas fa-lock text-slate-400 mr-1"></i> Sem mensalidades, pagamento único</span>
                         </div>
 
-                        <ul class="space-y-3 text-sm font-medium text-slate-600 border-t border-slate-100 pt-6">
-                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500"></i> Botão GPS direto no Maps</li>
-                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500"></i> RSVP via WhatsApp</li>
-                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500"></i> Hospedado por 60 dias</li>
-                            <li class="flex items-center gap-2 text-slate-300"><i class="fas fa-times"></i> Música de Fundo</li>
-                            <li class="flex items-center gap-2 text-slate-300"><i class="fas fa-times"></i> Painel de Presentes/Pix</li>
+                        <ul class="space-y-3.5 text-sm font-semibold text-slate-700 border-t border-slate-300/60 pt-6">
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-600"></i> Botão GPS direto no Google Maps</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-600"></i> RSVP Simplificado no WhatsApp</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-600"></i> Até 3 Fotos em Destaque</li>
+                            <li class="flex items-center gap-2 text-slate-400"><i class="fas fa-times text-rose-400"></i> Sem Mural de Mensagens</li>
+                            <li class="flex items-center gap-2 text-slate-400"><i class="fas fa-times text-rose-400"></i> Sem Painel de Presentes/PIX</li>
                         </ul>
                     </div>
-                    <a href="https://wa.me/5561984672596?text=Olá!%20Gostaria%20de%20encomendar%20o%20Plano%20Prático%20Silver%20da%20T4B" target="_blank" class="block text-center bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 px-6 rounded-2xl transition mt-8 text-sm">
-                        Quero o Plano Prático
+                    <a href="https://wa.me/5561984672596?text=Olá!%20Gostaria%20de%20encomendar%20o%20Plano%20Prático%20Silver%20da%20T4B" 
+                       target="_blank" 
+                       class="block text-center bg-slate-800 hover:bg-slate-900 text-white font-bold py-4 px-6 rounded-2xl transition mt-8 text-sm shadow-md">
+                        Contratar Prata Silver
                     </a>
                 </div>
 
-                <!-- Plano VIP Premium -->
-                <div class="bg-slate-950 text-white p-8 rounded-3xl border-2 border-indigo-500 shadow-xl flex flex-col justify-between relative">
-                    <span class="absolute -top-3 right-8 bg-indigo-600 text-white text-[9px] font-black tracking-widest uppercase px-3.5 py-1.5 rounded-full shadow-lg">Mais Escolhido</span>
+                <!-- Plano Golden Gold (Dourado de Luxo com Borda Neon Gold) -->
+                <div class="shine-effect bg-slate-950 text-white hover:scale-[1.03] transition duration-300 p-8 rounded-[36px] border-4 border-amber-400 shadow-[0_0_30px_rgba(245,158,11,0.25)] flex flex-col justify-between relative overflow-hidden">
+                    <span class="absolute -top-3 right-8 bg-amber-500 text-slate-950 text-[10px] font-black tracking-widest uppercase px-4 py-1.5 rounded-full shadow-lg">Campeão de Escolhas</span>
                     <div>
-                        <span class="text-indigo-400 text-xs font-bold tracking-widest uppercase">Plano Golden Gold</span>
-                        <h3 class="text-2xl font-black text-white mt-1">Interatividade Premium</h3>
-                        <p class="text-slate-400 text-sm mt-2">A experiência completa dos modelos com todas as funcionalidades e alta personalização.</p>
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <span class="text-amber-400 text-xs font-black tracking-wider uppercase block">PLANO SUPREMO</span>
+                                <h3 class="text-2xl font-black text-amber-300 mt-1">Ouro Golden</h3>
+                            </div>
+                            <span class="bg-amber-400/20 border border-amber-400 text-amber-300 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-wider">Completo VIP</span>
+                        </div>
+                        <p class="text-slate-300 text-sm mt-3 leading-relaxed">A mais luxuosa experiência digital para o seu evento. Conta com todos os recursos e atualizações garantidas por um ano.</p>
                         
-                        <div class="my-6">
-                            <span class="text-3xl font-black text-white">R$ 149,90</span>
-                            <span class="text-slate-400 text-xs font-semibold block mt-1">Pagamento Único, sem mensalidade</span>
+                        <div class="my-6 bg-gradient-to-r from-amber-500/10 via-amber-500/20 to-amber-500/10 rounded-2xl p-4 border border-amber-500/30">
+                            <span class="text-4xl font-black text-amber-300">R$ 149,90</span>
+                            <span class="text-slate-400 text-xs font-semibold block mt-1"><i class="fas fa-fire text-amber-400 mr-1"></i> Taxa única com hospedagem por 1 ano</span>
                         </div>
 
-                        <ul class="space-y-3 text-sm font-medium text-slate-300 border-t border-slate-800 pt-6">
-                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-400"></i> Botões ilimitados (Maps/Waze)</li>
-                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-400"></i> Trilha Sonora de Fundo Exclusiva</li>
-                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-400"></i> Lista de presentes com Pix Copia/Cola</li>
-                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-400"></i> Manual dos Padrinhos / Dress Code</li>
-                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-400"></i> Hospedagem ativa por 1 Ano</li>
+                        <ul class="space-y-3.5 text-sm font-semibold text-slate-200 border-t border-slate-800 pt-6">
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-amber-400"></i> Botões GPS ilimitados (Maps/Waze)</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-amber-400"></i> Galeria de Fotos Interativa (Até 12 Fotos)</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-amber-400"></i> Mural de Mensagens dos Convidados</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-amber-400"></i> Lista de Presentes com Pix Copia/Cola</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-amber-400"></i> Painel dos Padrinhos & Dress Code</li>
                         </ul>
                     </div>
-                    <a href="https://wa.me/5561984672596?text=Olá!%20Gostaria%20de%20encomendar%20o%20Plano%20Premium%20Golden%20da%20T4B" target="_blank" class="block text-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-6 rounded-2xl transition mt-8 text-sm shadow-lg shadow-indigo-600/20">
-                        Quero o Plano Premium
+                    <a href="https://wa.me/5561984672596?text=Olá!%20Gostaria%20de%20encomendar%20o%20Plano%20Premium%20Golden%20da%20T4B" 
+                       target="_blank" 
+                       class="block text-center bg-gradient-to-r from-amber-500 via-amber-600 to-amber-700 hover:from-amber-600 hover:to-amber-800 text-slate-950 font-black py-4 px-6 rounded-2xl transition mt-8 text-sm shadow-xl shadow-amber-500/20">
+                        Contratar Ouro Golden
                     </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- SEÇÃO DE FAQ (Perguntas Frequentes) -->
+    <!-- SEÇÃO DE FAQ DETALHADO (Para quebrar objeções de Tráfego Pago) -->
     <section id="faq" class="py-20 bg-white">
         <div class="container mx-auto px-4 md:px-8 max-w-4xl">
             <div class="text-center mb-16">
-                <span class="text-indigo-600 font-bold text-xs uppercase tracking-widest">Sem Dúvidas</span>
-                <h2 class="text-3xl font-extrabold mt-2 text-slate-900">Respostas Rápidas</h2>
+                <span class="text-indigo-600 font-bold text-xs uppercase tracking-widest">Esclareça Tudo</span>
+                <h2 class="text-3xl font-extrabold mt-2 text-slate-900">Perguntas Respondidas em Detalhes</h2>
+                <p class="text-slate-600 mt-2 text-sm leading-relaxed">Tem dúvidas? Selecionamos as principais perguntas de nossos clientes para explicar tudo detalhadamente.</p>
             </div>
 
-            <div class="space-y-4">
+            <div class="space-y-5">
                 <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200/60 shadow-sm">
                     <h4 class="font-bold text-slate-900 flex justify-between items-center text-sm md:text-base cursor-pointer" onclick="toggleFaq(this)">
-                        <span>Como os convidados acessam o convite interativo?</span>
+                        <span>Como os convidados acessam o convite interativo? Precisa instalar aplicativo?</span>
                         <i class="fas fa-chevron-down text-xs text-slate-500 transition-transform"></i>
                     </h4>
                     <p class="text-slate-600 text-sm mt-3 leading-relaxed hidden font-medium">
-                        Você receberá um link limpo e estilizado da T4B (ex: t4b.com.br/nosso-casamento). Basta enviar este link no WhatsApp de cada convidado. Ele funciona instantaneamente sem precisar baixar nada.
+                        Não precisa instalar absolutamente nada! O convite é hospedado em nossos servidores super rápidos. Seus convidados recebem um link limpo e elegante (por exemplo: <strong>t4b.com.br/manoela-e-augusto</strong>) e, ao clicar, o convite abre na hora no celular, tablet ou computador de forma rápida e segura.
                     </p>
                 </div>
 
                 <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200/60 shadow-sm">
                     <h4 class="font-bold text-slate-900 flex justify-between items-center text-sm md:text-base cursor-pointer" onclick="toggleFaq(this)">
-                        <span>Dá pra colocar música de verdade tocando de fundo?</span>
+                        <span>Como funciona o recebimento de presentes em dinheiro via PIX?</span>
                         <i class="fas fa-chevron-down text-xs text-slate-500 transition-transform"></i>
                     </h4>
                     <p class="text-slate-600 text-sm mt-3 leading-relaxed hidden font-medium">
-                        Com certeza! No Plano Premium, nós configuramos um player de música suave que começa a tocar assim que o convidado abre a tela e clica para aceitar a trilha sonora. É super emocionante.
+                        No modelo completo (Plano Ouro), nós integramos um botão elegante de lista de presentes. Ao clicar, o convidado vê as sugestões de presentes em dinheiro (cotas) e conta com um sistema prático de Pix Copia e Cola. O convidado copia a chave com um clique e realiza a transferência no aplicativo do banco dele. O dinheiro cai instantaneamente na sua conta bancária sem nenhuma taxa de intermediação da nossa parte.
                     </p>
                 </div>
 
                 <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200/60 shadow-sm">
                     <h4 class="font-bold text-slate-900 flex justify-between items-center text-sm md:text-base cursor-pointer" onclick="toggleFaq(this)">
-                        <span>Consigo alterar alguma informação caso ocorra algum imprevisto?</span>
+                        <span>Caso ocorra alguma mudança de local ou data, eu perco o convite?</span>
                         <i class="fas fa-chevron-down text-xs text-slate-500 transition-transform"></i>
                     </h4>
                     <p class="text-slate-600 text-sm mt-3 leading-relaxed hidden font-medium">
-                        Sim! Por ser baseado em nuvem, se houver alteração de horário, local ou protocolo, nós atualizamos o painel e o mesmo link já exibe a nova informação na mesma hora para todos.
+                        Não! Essa é uma das principais vantagens do convite digital inteligente. Se houver alguma alteração de última hora em relação à data, local, horário ou vestuário, basta nos acionar pelo suporte do WhatsApp. Nossa equipe altera a informação em poucos minutos e todos os seus convidados que acessarem o link já verão as informações atualizadas em tempo real.
+                    </p>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200/60 shadow-sm">
+                    <h4 class="font-bold text-slate-900 flex justify-between items-center text-sm md:text-base cursor-pointer" onclick="toggleFaq(this)">
+                        <span>Qual é o limite de envios do convite? Existe restrição?</span>
+                        <i class="fas fa-chevron-down text-xs text-slate-500 transition-transform"></i>
+                    </h4>
+                    <p class="text-slate-600 text-sm mt-3 leading-relaxed hidden font-medium">
+                        O envio é <strong>totalmente ilimitado</strong>! Você pode disparar o link para 50, 500 ou 5.000 convidados sem custos extras. O link também é compatível com geração de QR Codes para serem impressos e colados em convites físicos caso deseje fazer um formato híbrido.
+                    </p>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200/60 shadow-sm">
+                    <h4 class="font-bold text-slate-900 flex justify-between items-center text-sm md:text-base cursor-pointer" onclick="toggleFaq(this)">
+                        <span>Como funciona o Mural de Mensagens e Recados?</span>
+                        <i class="fas fa-chevron-down text-xs text-slate-500 transition-transform"></i>
+                    </h4>
+                    <p class="text-slate-600 text-sm mt-3 leading-relaxed hidden font-medium">
+                        No modelo Ouro, integramos uma seção linda onde os convidados escrevem mensagens curtas de felicitações diretamente na tela do convite. Você poderá ler todas as declarações de carinho deixadas pelos familiares e amigos, criando uma linda lembrança digital interativa do seu grande evento.
                     </p>
                 </div>
             </div>
@@ -475,7 +532,7 @@
             <span class="text-indigo-400 text-xs font-bold tracking-widest uppercase mb-4 block font-mono">Vamos Começar?</span>
             <h2 class="text-3xl md:text-4xl font-extrabold mb-4 leading-tight">O Seu Evento Merece a T4B</h2>
             <p class="text-slate-400 mb-8 text-sm md:text-base leading-relaxed font-medium">
-                Nossa equipe de atendimento especializado está online agora mesmo no WhatsApp para transformar suas ideias em uma belíssima obra prima digital interativa.
+                Nossa equipe de suporte especializado está online no WhatsApp agora mesmo para transformar seus detalhes em uma verdadeira obra de arte interativa.
             </p>
             
             <a href="https://wa.me/5561984672596?text=Olá!%20Desejo%20solicitar%20um%20projeto%20de%20convite%20interativo%20com%20a%20T4B!" 
@@ -486,7 +543,7 @@
 
             <div class="mt-16 pt-8 border-t border-slate-800/80 text-xs text-slate-500 space-y-2">
                 <p class="font-bold text-slate-300 tracking-wider">T4B - TECHNOLOGY FOR BUSINESS</p>
-                <p>Suporte Especializado: <a href="tel:5561984672596" class="hover:text-white transition font-bold">(61) 98467-2596</a> | Brasília - DF</p>
+                <p>Suporte Comercial: <a href="tel:5561984672596" class="hover:text-white transition font-bold">(61) 98467-2596</a> | Brasília - DF</p>
                 <p class="text-[10px] text-slate-600 mt-4">&copy; 2026 T4B. Todos os direitos reservados. Foco em Tecnologia e Resultados.</p>
             </div>
         </div>
@@ -495,7 +552,6 @@
     <!-- INTERATIVIDADE JAVASCRIPT DOS SIMULADORES E RSVP DINÂMICO -->
     <script>
         let timerInterval = null;
-        let audioPlayingSimulated = false;
 
         // Controle do cronômetro real do casamento no simulador
         function iniciarCronometro() {
@@ -529,6 +585,7 @@
             }, 1000);
         }
 
+        // Função Premium de Toast para evitar popups feios do navegador
         function showToast(mensagem) {
             const toast = document.getElementById('toastNotification');
             const msg = document.getElementById('toastMessage');
@@ -538,25 +595,6 @@
             setTimeout(() => {
                 toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
             }, 3000);
-        }
-
-        // Simulação do player de áudio (Visual)
-        function toggleAudioSimulado() {
-            audioPlayingSimulated = !audioPlayingSimulated;
-            const waves = document.getElementById('wave-animation');
-            const audioBtnText = document.getElementById('audio-btn-text');
-            const audioIcon = document.getElementById('audio-icon');
-
-            if (audioPlayingSimulated) {
-                waves.classList.remove('hidden');
-                audioIcon.className = "fas fa-pause";
-                audioBtnText.innerText = "Música Ativa (Pausar)";
-                showToast("🎵 Música 'Escolha dos Noivos' simulada com sucesso!");
-            } else {
-                waves.classList.add('hidden');
-                audioIcon.className = "fas fa-play";
-                audioBtnText.innerText = "Tocar Música de Fundo";
-            }
         }
 
         // Cópia elegante do PIX sem alert do navegador
@@ -582,7 +620,6 @@
             const contComoChegar = document.getElementById('conteudo-aba-chegar');
             const contTraje = document.getElementById('conteudo-aba-traje');
 
-            // Reset classes
             const btns = [btnCronograma, btnComoChegar, btnTraje];
             const conts = [contCronograma, contComoChegar, contTraje];
             
@@ -611,8 +648,27 @@
             const nome = document.getElementById('rsvp-nome').value;
             const convidados = document.getElementById('rsvp-quantidade').value;
             
-            showToast(`Obrigado, ${nome}! Confirmação de ${convidados} pessoa(s) enviada de forma fictícia.`);
+            showToast(`Obrigado, ${nome}! Confirmação de ${convidados} pessoa(s) simulada com sucesso.`);
             document.getElementById('rsvp-nome').value = '';
+        }
+
+        // Adicionar Mensagem ao Mural Simulando Interação em Tempo Real
+        function enviarMensagemMuralSimulada(event) {
+            event.preventDefault();
+            const autor = document.getElementById('mural-autor').value;
+            const msg = document.getElementById('mural-mensagem').value;
+
+            if (autor && msg) {
+                const container = document.getElementById('mensagens-container');
+                const novaMsg = document.createElement('div');
+                novaMsg.className = "bg-white p-2.5 rounded-xl border border-slate-100 shadow-xs";
+                novaMsg.innerHTML = `<p class="text-[10px] font-bold text-slate-800">${autor}</p><p class="text-[9px] text-slate-500 italic">"${msg}"</p>`;
+                container.prepend(novaMsg);
+
+                document.getElementById('mural-autor').value = '';
+                document.getElementById('mural-mensagem').value = '';
+                showToast("Mensagem de felicitação enviada ao mural!");
+            }
         }
 
         // Drawer da lista de presentes/PIX no celular do casamento
@@ -633,30 +689,15 @@
             let htmlInner = '';
 
             tela.scrollTop = 0;
-            audioPlayingSimulated = false;
 
             if (tipo === 'casamento') {
                 htmlInner = `
                     <div class="font-wedding text-center relative min-h-full flex flex-col justify-between pb-4">
                         <div>
-                            <!-- Música de Fundo Simulada -->
-                            <div class="bg-rose-50 border border-rose-200/50 p-2 rounded-2xl mb-4 flex items-center justify-between font-sans px-3">
-                                <button onclick="toggleAudioSimulado()" class="flex items-center gap-2 text-[10px] font-bold text-rose-600 bg-white border border-rose-300/40 shadow-sm py-1.5 px-3 rounded-full cursor-pointer">
-                                    <i id="audio-icon" class="fas fa-play"></i> <span id="audio-btn-text">Tocar Trilha Sonora</span>
-                                </button>
-                                <!-- Ondas de áudio animadas -->
-                                <div id="wave-animation" class="flex gap-0.5 items-end h-4 hidden">
-                                    <div class="audio-bar w-1 bg-rose-500 rounded-full"></div>
-                                    <div class="audio-bar w-1 bg-rose-500 rounded-full"></div>
-                                    <div class="audio-bar w-1 bg-rose-500 rounded-full"></div>
-                                    <div class="audio-bar w-1 bg-rose-500 rounded-full"></div>
-                                </div>
-                            </div>
-
-                            <!-- Banner Decorativo -->
-                            <div class="w-full h-36 rounded-2xl overflow-hidden mb-5 relative shadow-md">
+                            <!-- Carrossel de Fotos Integrado (Diferencial Próprio) -->
+                            <div class="w-full h-36 rounded-2xl overflow-hidden mb-4 relative shadow-md">
                                 <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover">
-                                <div class="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent"></div>
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                                 <span class="absolute bottom-3 left-1/2 -translate-x-1/2 text-white text-[10px] font-sans font-extrabold tracking-widest uppercase bg-rose-600/90 py-1 px-3.5 rounded-full">24 de Outubro de 2026</span>
                             </div>
                             
@@ -672,6 +713,16 @@
                                 <div class="text-center"><span id="cronometro-segundos" class="block text-sm font-extrabold text-rose-500">00</span><span class="text-[7px] text-rose-400 uppercase font-black tracking-wider">seg</span></div>
                             </div>
 
+                            <!-- Galeria de Fotos Interativa (Visualização no celular) -->
+                            <div class="mb-5 text-left font-sans">
+                                <p class="text-[10px] font-black text-rose-600 uppercase tracking-widest mb-2"><i class="fas fa-camera"></i> Galeria dos Noivos</p>
+                                <div class="grid grid-cols-3 gap-1.5">
+                                    <div class="h-12 bg-slate-100 rounded-lg overflow-hidden"><img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&q=80&w=150"></div>
+                                    <div class="h-12 bg-slate-100 rounded-lg overflow-hidden"><img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1519225495810-7512c696505a?auto=format&fit=crop&q=80&w=150"></div>
+                                    <div class="h-12 bg-slate-100 rounded-lg overflow-hidden"><img class="w-full h-full object-cover" src="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&q=80&w=150"></div>
+                                </div>
+                            </div>
+
                             <!-- Detalhes do Dia e do Local -->
                             <div class="text-left text-xs text-slate-700 space-y-2.5 mb-6 font-sans border-y border-slate-100 py-4 px-1">
                                 <div class="flex items-center gap-2"><i class="fas fa-calendar-days text-rose-400"></i> <span><strong>Data Oficial:</strong> Sábado, 24 de Outubro</span></div>
@@ -679,7 +730,7 @@
                                 <div class="flex items-center gap-2"><i class="fas fa-map-pin text-rose-400"></i> <span><strong>Espaço:</strong> Espaço das Águas Eventos, Lago Sul</span></div>
                             </div>
 
-                            <!-- Manual de Dress Code (Destaque para ajudar na compra) -->
+                            <!-- Manual de Dress Code -->
                             <div class="bg-rose-50/40 p-4 rounded-2xl mb-6 font-sans text-left border border-rose-200/20">
                                 <h4 class="text-[10px] font-black text-rose-600 uppercase tracking-widest mb-2"><i class="fas fa-vest"></i> Vestuário Sugerido (Dress Code)</h4>
                                 <p class="text-[10px] text-slate-500 leading-relaxed mb-3"><strong>Traje Passeio Completo/Social:</strong> Convidamos todos a irem de tons suaves. Evite tons de branco e off-white para priorizarmos a noiva.</p>
@@ -688,6 +739,22 @@
                                     <span class="w-4 h-4 rounded-full bg-rose-200 border border-slate-200" title="Champagne"></span>
                                     <span class="w-4 h-4 rounded-full bg-amber-100 border border-slate-200" title="Nude"></span>
                                     <span class="w-4 h-4 rounded-full bg-blue-100 border border-slate-200" title="Serenity"></span>
+                                </div>
+                            </div>
+
+                            <!-- Mural de Recados Interativo -->
+                            <div class="bg-white p-4 rounded-2xl mb-6 font-sans border border-rose-100 text-left">
+                                <h4 class="text-[10px] font-black text-rose-600 uppercase tracking-widest mb-2"><i class="fas fa-comments"></i> Mural de Recados dos Convidados</h4>
+                                <form onsubmit="enviarMensagemMuralSimulada(event)" class="space-y-1.5 mb-3">
+                                    <input type="text" id="mural-autor" placeholder="Seu Nome" required class="w-full bg-slate-50 border border-slate-100 text-[10px] p-2 rounded-lg outline-none text-slate-800">
+                                    <textarea id="mural-mensagem" placeholder="Deixe seus votos para os noivos..." required class="w-full bg-slate-50 border border-slate-100 text-[10px] p-2 rounded-lg outline-none text-slate-800 h-12 resize-none"></textarea>
+                                    <button type="submit" class="w-full bg-rose-500 text-white font-bold text-[10px] py-1.5 rounded-lg hover:bg-rose-600 transition cursor-pointer">Postar Recado</button>
+                                </form>
+                                <div id="mensagens-container" class="space-y-2 max-h-36 overflow-y-auto no-scrollbar">
+                                    <div class="bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                                        <p class="text-[10px] font-bold text-slate-800">Tia Lurdes</p>
+                                        <p class="text-[9px] text-slate-500 italic">"Que Deus abençoe imensamente essa linda união!"</p>
+                                    </div>
                                 </div>
                             </div>
 
