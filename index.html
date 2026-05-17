@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GABI CUP 2026 | SELEÇÃO HEXA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root {
+            --copa-verde: #008744;
+            --copa-amarelo: #ffcc00;
+            --copa-azul: #0033aa;
+            --stadium-glow: radial-gradient(circle at 50% 30%, #00a859 0%, #004b23 80%);
+            --gold-gradient: linear-gradient(135deg, #FFE259 0%, #FFA751 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            font-family: 'Outfit', sans-serif; 
+            background-color: #004b23; 
+            color: white; 
+            overflow-x: hidden;
+        }
+
+        .font-sport { font-family: 'Bangers', cursive; letter-spacing: 2px; }
+
+        /* Fundo Temático de Copa do Mundo */
+        .animated-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--stadium-glow);
+            z-index: -1;
+        }
+        .animated-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0,75,35,0) 40%, rgba(0,75,35,0.95) 100%);
+            pointer-events: none;
+        }
+
+        /* Animações fluidas */
+        .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
+        .animate-slide-up { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Título Canarinho Iluminado */
+        .premium-title {
+            background: linear-gradient(to bottom, #fff, var(--copa-amarelo));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 4px 15px rgba(0, 0, 0, 0.6));
+        }
+
+        /* Card de Figurinha Lendária da Copa */
+        .sticker-wrapper {
+            position: relative;
+            padding: 6px;
+            background: var(--gold-gradient);
+            border-radius: 2.2rem;
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 204, 0, 0.3);
+            animation: cardFloat 4s ease-in-out infinite;
+        }
+        @keyframes cardFloat {
+            0%, 100% { transform: translateY(0) rotate(-0.5deg); }
+            50% { transform: translateY(-8px) rotate(0.5deg); }
+        }
+
+        .sticker-card {
+            background: var(--copa-azul);
+            border-radius: 1.9rem;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid var(--copa-amarelo);
+        }
+
+        /* Brilho Holográfico Cromado */
+        .holo-overlay {
+            position: absolute;
+            inset: -150%;
+            background: linear-gradient(115deg, 
+                rgba(255,255,255,0) 40%, 
+                rgba(255, 255, 255, 0.4) 50%, 
+                rgba(255,255,255,0) 60%);
+            animation: holoSweep 3.5s ease-in-out infinite;
+            pointer-events: none;
+            mix-blend-mode: overlay;
+        }
+        @keyframes holoSweep {
+            0% { transform: translate(-15%, -15%); }
+            100% { transform: translate(15%, 15%); }
+        }
+
+        .page { display: none; }
+        .page.active { display: block; }
+
+        /* Botões Estilo Campeão */
+        .btn-gold {
+            background: var(--gold-gradient);
+            color: #000;
+            font-weight: 900;
+            box-shadow: 0 10px 25px rgba(255, 167, 81, 0.4);
+            transition: all 0.2s ease;
+        }
+        .btn-gold:active { transform: scale(0.96); }
+
+        /* Customização dos Inputs Ativos */
+        .gift-option input:checked + div, .gender-option input:checked + div {
+            border-color: var(--copa-amarelo);
+            background: rgba(0, 51, 170, 0.4);
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.3);
+            transform: scale(1.02);
+        }
+        .gift-option div, .gender-option div { transition: all 0.2s ease; border: 2px solid rgba(255,255,255,0.1); }
+
+        #cameraContainer {
+            position: relative;
+            width: 170px;
+            height: 170px;
+            margin: 0 auto;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid var(--copa-amarelo);
+            box-shadow: 0 0 25px rgba(255, 204, 0, 0.4);
+        }
+        #videoFeed, #photoPreview {
+            width: 100%; height: 100%; object-fit: cover;
+            transform: scaleX(-1); -webkit-transform: scaleX(-1);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="animated-bg"></div>
+
+    <div class="max-w-md mx-auto min-h-screen flex flex-col pb-12">
+        
+        <div id="successModal" class="hidden fixed inset-0 z-[999] flex flex-col items-center justify-center px-6 bg-[#002b11]/98 backdrop-blur-xl overflow-y-auto py-8">
+            <p class="text-yellow-400 font-sport text-4xl mb-1 tracking-widest animate-bounce">CONVOCADO(A)!</p>
+            <p class="text-white text-[10px] font-black uppercase tracking-[3px] text-center mb-6">Tire print, poste nos stories e marque a @gabrieledionizzio</p>
+            
+            <div class="sticker-wrapper p-1 w-full max-w-xs mb-6">
+                <div class="bg-[#0033aa] p-5 rounded-[1.9rem] text-center border-4 border-yellow-400 relative overflow-hidden flex flex-col items-center">
+                    <div class="holo-overlay"></div>
+                    
+                    <div class="absolute top-3 left-4 flex gap-0.5 text-yellow-400 text-[8px]">⭐⭐⭐⭐⭐</div>
+                    <span id="badgeGender" class="absolute top-3 right-4 bg-yellow-400 text-black font-black text-[9px] px-2.5 py-0.5 rounded-full tracking-wider shadow-lg">JOGADORA</span>
+                    
+                    <div class="w-32 h-32 rounded-full border-4 border-yellow-400 overflow-hidden shadow-2xl mb-3 mt-4 relative z-10 bg-emerald-900">
+                        <img id="cardPhoto" src="" class="w-full h-full object-cover">
+                    </div>
+
+                    <h2 id="cardName" class="font-sport text-4xl text-yellow-400 leading-tight z-10 uppercase tracking-wide drop-shadow-md truncate max-w-full px-2">NOME DO CRAQUE</h2>
+                    
+                    <div class="mt-3 bg-black/40 border border-yellow-400/40 px-4 py-2.5 rounded-xl z-10 w-full backdrop-blur-md text-left space-y-1.5">
+                        <div>
+                            <p class="text-[8px] text-yellow-400 font-black uppercase tracking-widest mb-0.5">Posição Confirmada</p>
+                            <p id="cardPosition" class="text-xs font-bold text-white">Atacante do Open Bar</p>
+                        </div>
+                        <div class="h-px bg-white/10"></div>
+                        <div>
+                            <p class="text-[8px] text-emerald-300 font-black uppercase tracking-widest mb-0.5">Habilidade Especial Única</p>
+                            <p id="cardSkill" class="text-[11px] text-white/90 italic leading-snug font-medium">Carregando stats personalizados...</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 flex justify-between items-center w-full z-10 px-1">
+                        <span id="cardOvr" class="text-[9px] font-black text-yellow-400 bg-black/40 border border-yellow-400/20 px-2 py-0.5 rounded">99 OVR</span>
+                        <div class="text-[8px] text-white/60 tracking-wider uppercase font-bold text-right">GABI CUP 2026<br><span class="text-yellow-400">★ SELEÇÃO HEXA ★</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="closeModal()" class="w-full max-w-xs btn-gold py-4 rounded-2xl text-[11px] tracking-[0.3em] uppercase">Voltar ao Início</button>
+        </div>
+
+        <section id="home" class="page active px-6 pt-10 space-y-8 animate-fade-in">
+            <header class="text-center space-y-2">
+                <p class="text-yellow-400 font-black tracking-[0.5em] text-[9px] uppercase animate-pulse">Rumo ao Hexa | 2026</p>
+                <h1 class="text-7xl font-sport leading-none premium-title">27 DA GAB'S</h1>
+                <div class="inline-flex items-center gap-3 bg-black/40 border border-yellow-400/30 px-5 py-2 rounded-full backdrop-blur-md shadow-lg">
+                    <span class="w-2.5 h-2.5 bg-yellow-400 rounded-full animate-ping"></span>
+                    <span class="text-[10px] font-black tracking-[0.2em] text-white">KICK-OFF EM: <span id="days">00</span>D : <span id="hours">00</span>H : <span id="mins">00</span>M</span>
+                </div>
+            </header>
+
+            <div class="sticker-wrapper">
+                <div class="sticker-card">
+                    <div class="holo-overlay"></div>
+                    <img src="https://i.imgur.com/4DwHOAB.jpeg" class="w-full h-auto brightness-110">
+                    <div class="absolute top-5 left-5 bg-yellow-400 text-black font-sport text-4xl w-14 h-14 flex items-center justify-center rounded-2xl shadow-2xl border-2 border-white/40 transform -rotate-12">10</div>
+                    <div class="absolute bottom-6 left-0 right-0 text-center">
+                        <div class="inline-block bg-emerald-600 text-white px-6 py-1.5 rounded-full text-[10px] font-black tracking-[0.3em] border-2 border-yellow-400 shadow-xl">FIGURINHA LENDÁRIA</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div class="bg-black/30 border border-white/10 p-5 rounded-[2rem] text-center backdrop-blur-md shadow-lg">
+                    <p class="text-[8px] text-yellow-400 font-black uppercase tracking-widest mb-1">Abertura dos Portões</p>
+                    <p class="text-md font-bold text-white/95">06 JUN • 15h</p>
+                </div>
+                <a href="http://maps.google.com/?q=S%C3%A3o+Paulo" target="_blank" class="bg-black/30 border border-yellow-400/40 p-5 rounded-[2rem] text-center hover:bg-emerald-800/40 transition-all flex flex-col justify-center items-center backdrop-blur-md shadow-lg group">
+                    <p class="text-[8px] text-yellow-400 font-black uppercase tracking-widest mb-1">Localização</p>
+                    <p class="text-[10px] font-bold text-white mb-1 uppercase tracking-tighter">Ver no Mapa</p>
+                    <span class="text-[8px] font-black bg-yellow-400 text-black px-2 py-0.5 rounded uppercase transform group-hover:scale-105 transition-all">Clique Aqui 📍</span>
+                </a>
+            </div>
+
+            <div class="space-y-4 px-1">
+                <a href="https://instagram.com/gabrieledionizzio" target="_blank" class="flex items-center justify-between p-5 bg-gradient-to-r from-blue-900 to-blue-950 border border-yellow-400/30 rounded-[2.2rem] hover:border-yellow-400 transition-all group shadow-xl">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 bg-yellow-400 text-black font-bold rounded-2xl flex items-center justify-center text-xl shadow-lg transform group-hover:rotate-6 transition-all">📸</div>
+                        <div>
+                            <p class="text-[9px] font-black text-emerald-300 uppercase tracking-widest">Acompanhe no Instagram</p>
+                            <p class="font-bold text-lg tracking-tight text-white">@gabrieledionizzio</p>
+                        </div>
+                    </div>
+                    <span class="text-yellow-400 mr-2 opacity-80 transform group-hover:translate-x-1 transition-all">➔</span>
+                </a>
+            </div>
+
+            <button onclick="showPage('rsvp')" class="w-full btn-gold py-6 rounded-[2.5rem] text-2xl font-sport tracking-[0.2em]">
+                Confirmar Convocação ⚽
+            </button>
+        </section>
+
+        <section id="rsvp" class="page px-6 pt-10">
+            <button onclick="showPage('home')" class="text-[10px] font-black text-yellow-400 mb-8 tracking-[4px] uppercase hover:text-white transition-all">← Voltar ao Início</button>
+            
+            <div id="step-1" class="space-y-6 declare-slide-up">
+                <div class="space-y-2">
+                    <h2 class="text-5xl font-sport text-yellow-400 leading-none">FAZER CHECK-IN</h2>
+                    <p class="text-[10px] uppercase tracking-widest text-emerald-300 font-bold">Monte os dados do seu passaporte oficial hexa.</p>
+                </div>
+                
+                <div class="space-y-4">
+                    <input type="text" id="guestName" class="w-full bg-black/30 border-2 border-white/10 p-6 rounded-3xl text-xl focus:outline-none focus:border-yellow-400 transition-all text-white font-bold placeholder-white/20" placeholder="Seu Nome Completo">
+                    
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="gender-option block cursor-pointer">
+                            <input type="radio" name="gender" value="JOGADOR" class="hidden" checked>
+                            <div class="p-4 bg-black/20 rounded-2xl text-center font-black text-xs tracking-wider">⚽ JOGADOR</div>
+                        </label>
+                        <label class="gender-option block cursor-pointer">
+                            <input type="radio" name="gender" value="JOGADORA" class="hidden">
+                            <div class="p-4 bg-black/20 rounded-2xl text-center font-black text-xs tracking-wider">👑 JOGADORA</div>
+                        </label>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-black text-yellow-300 tracking-wider uppercase opacity-80">Escolha onde joga em campo:</label>
+                        <select id="playerPosition" class="w-full bg-[#002b11] border-2 border-white/10 p-5 rounded-2xl text-sm font-black text-white focus:outline-none focus:border-yellow-400 transition-all">
+                            <option value="Atacante do Open Bar">Atacante do Open Bar 🍻</option>
+                            <option value="Zagueiro(a) da Dignidade">Zagueiro(a) da Dignidade (Não deixa cair) 🛡️</option>
+                            <option value="Camisa 10 do Grupo">Camisa 10 do Grupo (O que agita) 👑</option>
+                            <option value="Meia de Ligação (Só fofoca)">Meia de Ligação (Leva e traz fofoca) 🗣️</option>
+                            <option value="Gandula de Gelo e Copo">Gandula de Gelo e Copo 🧊</option>
+                        </select>
+                    </div>
+
+                    <div class="bg-black/30 border-2 border-yellow-400/20 p-5 rounded-3xl space-y-4 text-center backdrop-blur-md">
+                        <p class="text-[10px] font-black text-yellow-400 tracking-wider uppercase">Bata a Foto do seu Passaporte:</p>
+                        
+                        <div id="cameraContainer">
+                            <video id="videoFeed" autoplay playsinline></video>
+                            <img id="photoPreview" class="hidden">
+                        </div>
+
+                        <div class="flex justify-center gap-3">
+                            <button type="button" id="btnCapture" onclick="capturePhoto()" class="bg-yellow-400 text-black font-black text-[11px] tracking-widest px-6 py-3 rounded-xl uppercase shadow-lg active:scale-95 transition-all">Capturar Foto 📸</button>
+                            <button type="button" id="btnRetake" onclick="startCamera()" class="hidden bg-white/10 border border-white/20 text-white font-black text-[11px] tracking-widest px-6 py-3 rounded-xl uppercase active:scale-95 transition-all">Tirar Outra 🔄</button>
+                        </div>
+                        <canvas id="photoCanvas" class="hidden" width="300" height="300"></canvas>
+                    </div>
+
+                    <p id="errorMsg" class="hidden text-orange-400 text-[10px] font-black uppercase tracking-widest text-center animate-pulse">⚠️ Nome obrigatório e tire sua foto!</p>
+                    <button onclick="goToGifts()" class="w-full bg-white text-black font-black py-6 rounded-3xl font-sport text-2xl tracking-[0.1em] shadow-xl">AVANÇAR PARA OS PRESENTES</button>
+                </div>
+            </div>
+
+            <div id="step-2" class="hidden space-y-8 animate-slide-up">
+                <div class="space-y-2">
+                    <h2 class="text-5xl font-sport text-yellow-400">ESCOLHA O PRESENTINHO</h2>
+                    <p class="text-[10px] text-emerald-300 uppercase tracking-widest font-black">Escalação Obrigatória de Presente para a Gabi:</p>
+                </div>
+
+                <div class="space-y-3" id="giftList">
+                    <label class="gift-option block relative cursor-pointer group">
+                        <input type="checkbox" value="Voucher Sephora" class="hidden">
+                        <div class="p-6 bg-black/20 rounded-3xl flex justify-between items-center">
+                            <span class="font-black tracking-wide text-md">Voucher Sephora</span>
+                            <div class="w-3.5 h-3.5 rounded-full bg-white/10 dot"></div>
+                        </div>
+                    </label>
+
+                    <label class="gift-option block relative cursor-pointer group">
+                        <input type="checkbox" value="Kit Blogueira Camisa 10" class="hidden">
+                        <div class="p-6 bg-black/20 rounded-3xl flex justify-between items-center">
+                            <span class="font-black tracking-wide text-md">Kit Blogueira Camisa 10</span>
+                            <div class="w-3.5 h-3.5 rounded-full bg-white/10 dot"></div>
+                        </div>
+                    </label>
+
+                    <label class="gift-option block relative cursor-pointer group">
+                        <input type="checkbox" value="Mimo via PIX" class="hidden">
+                        <div class="p-6 bg-yellow-500/10 border-2 border-yellow-500/30 rounded-3xl flex justify-between items-center">
+                            <span class="font-black text-yellow-300 italic text-md">Mimo de Craque via PIX (Qualquer valor)</span>
+                            <div class="w-3.5 h-3.5 rounded-full bg-yellow-500/20 dot"></div>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="text-center p-6 bg-black/40 rounded-[2rem] border-2 border-dashed border-yellow-400/30">
+                    <p class="text-[9px] font-black text-yellow-300 uppercase tracking-[0.3em] mb-2">Chave Oficial (Copiar Chave)</p>
+                    <code class="block text-sm font-mono mb-2 text-white/90 select-all tracking-wide">pixdagabi@influencer.com</code>
+                    <p class="text-[8px] font-bold text-emerald-300 uppercase tracking-widest">Toque sob o texto para copiar</p>
+                </div>
+
+                <div class="space-y-4">
+                    <p id="giftError" class="hidden text-orange-400 text-[10px] text-center font-black uppercase tracking-widest animate-pulse">⚠️ Escolha um presente antes de finalizar!</p>
+                    <button onclick="finalizarConfirmacao()" class="w-full btn-gold py-6 rounded-[2.5rem] font-sport text-3xl tracking-[0.2em]">FINALIZAR MINHA ESCALAÇÃO 📱</button>
+                </div>
+            </div>
+        </section>
+
+        <footer class="mt-auto px-6 text-center animate-fade-in">
+            <div class="h-px bg-gradient-to-r from-transparent via-yellow-400/30 to-transparent w-full mb-10"></div>
+            <p class="text-[9px] font-black text-white/30 uppercase tracking-[0.5em] mb-3">Designed by Elite Systems</p>
+            <div class="inline-block bg-black/30 px-10 py-3 rounded-2xl border border-white/10 shadow-xl">
+                <p class="text-xl font-sport text-yellow-400 tracking-[5px]">RENATO BRILHANTE</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const WHATSAPP_NUMERO = "5511999999999"; 
+        const DATA_EVENTO = new Date('June 6, 2026 15:00:00').getTime();
+
+        let localStream = null;
+        let fotoCapturadaDataUrl = null;
+
+        // BANCO DE DADOS DE ENGENHARIA DE FRASES RANDÔMICAS PARA ENGAJAMENTO
+        const COMPONENTES_HABILIDADE = {
+            "Atacante do Open Bar": {
+                status: ["Fôlego Etílico", "Drible no Garçom", "Pontaria de Shot"],
+                frases: [
+                    "Sabe a hora exata de parar, mas decide ignorar com maestria.",
+                    "Artilheiro isolado da pista. Promete zerar os estoques de destilados em tempo recorde.",
+                    "Especialista em pedir o próximo combo enquanto o atual nem chegou na mesa.",
+                    "Tem precisão cirúrgica para encontrar copos vazios num raio de 50 metros."
+                ]
+            },
+            "Zagueiro(a) da Dignidade": {
+                status: ["Bloqueio de Ex", "Resistência Física", "Defesa de Queda"],
+                frases: [
+                    "Muralha inviolável. Não deixa ninguém cair no chão nem mandar textão de madrugada.",
+                    "Responsável tático por segurar o cabelo das amigas e confiscar celulares perigosos.",
+                    "Garante que o time volte inteiro para casa sem perder o RG ou o bom senso.",
+                    "O verdadeiro anjo da guarda da pista. Neutraliza 100% dos tombos iminentes."
+                ]
+            },
+            "Camisa 10 do Grupo": {
+                status: ["Visão de Jogo", "Passe de Fofoca", "Carisma Lendário"],
+                frases: [
+                    "Dono do passe milimétrico que inflama qualquer rodinha de conversa na VIP.",
+                    "Dita o ritmo do evento. Se o camisa 10 tá bebendo, o time tá ganhando.",
+                    "Capacidade fora do comum de fazer amizade até com os seguranças da festa.",
+                    "O arquiteto do rolê. Sem ele, a energia do camarote cairia para a segunda divisão."
+                ]
+            },
+            "Meia de Ligação (Só fofoca)": {
+                status: ["Radar de VIP", "Velocidade de Áudio", "Controle de Campo"],
+                frases: [
+                    "Conecta todos os setores do evento trazendo as informações mais quentes da rodada.",
+                    "Descobre quem tá pegando quem antes mesmo do casal perceber o clima.",
+                    "Especialista em mapear os melhores ângulos e fofocas em tempo real.",
+                    "Sua leitura de jogo social é mais rápida que a internet 5G do evento."
+                ]
+            },
+            "Gandula de Gelo e Copo": {
+                status: ["Suporte Tático", "Velocidade de Gelo", "Reposicionamento"],
+                frases: [
+                    "Trabalho sujo impecável! O herói que nunca deixa o time ficar com copo quente.",
+                    "Abastecimento premium garantido. Corre mais que os atacantes para buscar energético.",
+                    "Invisível na pista, mas vital para manter os copos cheios e a dignidade gelada.",
+                    "O pilar logístico da noite. Sua velocidade para achar gelo seco quebra recordes mundiais."
+                ]
+            }
+        };
+
+        // FUNÇÃO QUE GERA A FRASE DA CARTEIRINHA DE FORMA TOTALMENTE INDIVIDUAL
+        function gerarHabilidadeUnica(posicao) {
+            const config = COMPONENTES_HABILIDADE[posicao] || { status: ["Raridade"], frases: ["Craque nato indescritível."] };
+            
+            // Sorteia elementos aleatórios
+            const statusSorteado = config.status[Math.floor(Math.random() * config.status.length)];
+            const fraseSorteada = config.frases[Math.floor(Math.random() * config.frases.length)];
+            const notaStatus = Math.floor(Math.random() * 15) + 85; // Notas lendárias entre 85 e 99
+
+            return `[${statusSorteado}: ${notaStatus}] — ${fraseSorteada}`;
+        }
+
+        function updateTimer() {
+            const ago = new Date().getTime();
+            const d = DATA_EVENTO - ago;
+            if (d < 0) return;
+            document.getElementById('days').innerText = String(Math.floor(d / (1000*60*60*24))).padStart(2, '0');
+            document.getElementById('hours').innerText = String(Math.floor((d % (1000*60*60*24)) / (1000*60*60))).padStart(2, '0');
+            document.getElementById('mins').innerText = String(Math.floor((d % (1000*60*60)) / (1000*60))).padStart(2, '0');
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            
+            if(id === 'rsvp') {
+                startCamera();
+            } else {
+                stopCamera();
+            }
+        }
+
+        async function startCamera() {
+            try {
+                fotoCapturadaDataUrl = null;
+                document.getElementById('videoFeed').classList.remove('hidden');
+                document.getElementById('photoPreview').classList.add('hidden');
+                document.getElementById('btnCapture').classList.remove('hidden');
+                document.getElementById('btnRetake').classList.add('hidden');
+
+                localStream = await navigator.mediaDevices.getUserMedia({ 
+                    video: { facingMode: "user", width: 300, height: 300 } 
+                });
+                document.getElementById('videoFeed').srcObject = localStream;
+            } catch (err) {
+                console.log("Câmera indisponível no dispositivo.");
+            }
+        }
+
+        function capturePhoto() {
+            const video = document.getElementById('videoFeed');
+            const canvas = document.getElementById('photoCanvas');
+            const ctx = canvas.getContext('2d');
+
+            ctx.translate(canvas.width, 0);
+            ctx.scale(-1, 1);
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+            fotoCapturadaDataUrl = canvas.toDataURL('image/jpeg');
+            
+            document.getElementById('photoPreview').src = fotoCapturadaDataUrl;
+            document.getElementById('videoFeed').classList.add('hidden');
+            document.getElementById('photoPreview').classList.remove('hidden');
+            document.getElementById('btnCapture').classList.add('hidden');
+            document.getElementById('btnRetake').classList.remove('hidden');
+
+            stopCamera();
+        }
+
+        function stopCamera() {
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+            }
+        }
+
+        function goToGifts() {
+            const input = document.getElementById('guestName');
+            const error = document.getElementById('errorMsg');
+            
+            if(!input.value.trim() || !fotoCapturadaDataUrl) {
+                input.classList.add('border-red-500');
+                error.classList.remove('hidden');
+                return;
+            }
+            error.classList.add('hidden');
+            document.getElementById('step-1').classList.add('hidden');
+            document.getElementById('step-2').classList.remove('hidden');
+        }
+
+        function finalizarConfirmacao() {
+            const nome = document.getElementById('guestName').value;
+            const genero = document.querySelector('input[name="gender"]:checked').value;
+            const posicao = document.getElementById('playerPosition').value;
+            
+            const selecionados = [];
+            document.querySelectorAll('#giftList input:checked').forEach(i => selecionados.push(i.value));
+            
+            const errorTxt = document.getElementById('giftError');
+
+            if(selecionados.length === 0) {
+                errorTxt.classList.remove('hidden');
+                return;
+            }
+
+            errorTxt.classList.add('hidden');
+            
+            // Renderiza dados e sorteia pontuação OVR única (ex: 96, 97, 98 ou 99)
+            const ovrAleatorio = Math.floor(Math.random() * 4) + 96;
+            document.getElementById('cardOvr').innerText = `${ovrAleatorio} OVR`;
+
+            document.getElementById('cardPhoto').src = fotoCapturadaDataUrl;
+            document.getElementById('cardName').innerText = nome;
+            document.getElementById('cardPosition').innerText = posicao;
+            document.getElementById('badgeGender').innerText = genero;
+            
+            // Aciona o gerador de frases únicas!
+            document.getElementById('cardSkill').innerText = gerarHabilidadeUnica(posicao);
+
+            const mimosTxt = selecionados.join(", ");
+            const textoWhats = `*GABI CUP 2026 | SELEÇÃO VIP* 🏆\n\n💎 *CRAQUE:* ${nome}\n🎭 *GÊNERO:* ${genero}\n📍 *POSIÇÃO EM CAMPO:* ${posicao}\n🎁 *ESCALAÇÃO PRESENTE:* ${mimosTxt}`;
+            
+            window.open(`https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(textoWhats)}`, '_blank');
+            
+            document.getElementById('successModal').classList.remove('hidden');
+            confetti({ particleCount: 200, spread: 90, origin: { y: 0.6 }, colors: ['#ffcc00', '#ffffff', '#0033aa'] });
+        }
+
+        function closeModal() {
+            document.getElementById('successModal').classList.add('hidden');
+            showPage('home');
+        }
+    </script>
+</body>
+</html>
