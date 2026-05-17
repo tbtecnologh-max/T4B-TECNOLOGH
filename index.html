@@ -1,533 +1,867 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>GABI CUP 2026 | SELEÇÃO HEXA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T4B - Convites Digitais Interativos Premium</title>
+    <!-- Tailwind CSS v3 para Estilização Eficiente -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Outfit:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Configuração do Tailwind para fontes premium e cores customizadas -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Montserrat', 'sans-serif'],
+                        wedding: ['Cormorant Garamond', 'serif'],
+                        kids: ['Fredoka', 'sans-serif'],
+                    },
+                    colors: {
+                        gold: {
+                            50: '#fdfbf7',
+                            100: '#fbf7ed',
+                            200: '#f4ebd2',
+                            300: '#eddca1',
+                            400: '#e1c667',
+                            500: '#d2ab3c',
+                            600: '#ba932f',
+                            700: '#9c7727',
+                            800: '#7f5f22',
+                            900: '#684e1e',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts Premium -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Fredoka:wght@400;600;700&family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        :root {
-            --copa-verde: #008744;
-            --copa-amarelo: #ffcc00;
-            --copa-azul: #0033aa;
-            --stadium-glow: radial-gradient(circle at 50% 30%, #00a859 0%, #004b23 80%);
-            --gold-gradient: linear-gradient(135deg, #FFE259 0%, #FFA751 100%);
+        /* Efeito de Vidro Desfocado (Glassmorphism) */
+        .glass {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
-        body { 
-            font-family: 'Outfit', sans-serif; 
-            background-color: #004b23; 
-            color: white; 
-            overflow-x: hidden;
+        /* Ocultar barra de rolagem padrão mas manter funcionalidade */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
         }
-
-        .font-sport { font-family: 'Bangers', cursive; letter-spacing: 2px; }
-
-        /* Fundo Temático de Copa do Mundo */
-        .animated-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--stadium-glow);
-            z-index: -1;
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
         }
-        .animated-bg::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(180deg, rgba(0,75,35,0) 40%, rgba(0,75,35,0.95) 100%);
-            pointer-events: none;
+        /* Animação suave para as ondas de áudio simuladas */
+        @keyframes sound-wave {
+            0%, 100% { height: 4px; }
+            50% { height: 16px; }
         }
-
-        /* Animações fluidas */
-        .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
-        .animate-slide-up { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Título Canarinho Iluminado */
-        .premium-title {
-            background: linear-gradient(to bottom, #fff, var(--copa-amarelo));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 4px 15px rgba(0, 0, 0, 0.6));
+        .audio-bar {
+            animation: sound-wave 1.2s ease-in-out infinite;
         }
-
-        /* Card de Figurinha Lendária da Copa */
-        .sticker-wrapper {
-            position: relative;
-            padding: 6px;
-            background: var(--gold-gradient);
-            border-radius: 2.2rem;
-            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 204, 0, 0.3);
-            animation: cardFloat 4s ease-in-out infinite;
-        }
-        @keyframes cardFloat {
-            0%, 100% { transform: translateY(0) rotate(-0.5deg); }
-            50% { transform: translateY(-8px) rotate(0.5deg); }
-        }
-
-        .sticker-card {
-            background: var(--copa-azul);
-            border-radius: 1.9rem;
-            position: relative;
-            overflow: hidden;
-            border: 3px solid var(--copa-amarelo);
-        }
-
-        /* Brilho Holográfico Cromado */
-        .holo-overlay {
-            position: absolute;
-            inset: -150%;
-            background: linear-gradient(115deg, 
-                rgba(255,255,255,0) 40%, 
-                rgba(255, 255, 255, 0.4) 50%, 
-                rgba(255,255,255,0) 60%);
-            animation: holoSweep 3.5s ease-in-out infinite;
-            pointer-events: none;
-            mix-blend-mode: overlay;
-        }
-        @keyframes holoSweep {
-            0% { transform: translate(-15%, -15%); }
-            100% { transform: translate(15%, 15%); }
-        }
-
-        .page { display: none; }
-        .page.active { display: block; }
-
-        /* Botões Estilo Campeão */
-        .btn-gold {
-            background: var(--gold-gradient);
-            color: #000;
-            font-weight: 900;
-            box-shadow: 0 10px 25px rgba(255, 167, 81, 0.4);
-            transition: all 0.2s ease;
-        }
-        .btn-gold:active { transform: scale(0.96); }
-
-        /* Customização dos Inputs Ativos */
-        .gift-option input:checked + div, .gender-option input:checked + div {
-            border-color: var(--copa-amarelo);
-            background: rgba(0, 51, 170, 0.4);
-            box-shadow: 0 0 20px rgba(255, 204, 0, 0.3);
-            transform: scale(1.02);
-        }
-        .gift-option div, .gender-option div { transition: all 0.2s ease; border: 2px solid rgba(255,255,255,0.1); }
-
-        #cameraContainer {
-            position: relative;
-            width: 170px;
-            height: 170px;
-            margin: 0 auto;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 4px solid var(--copa-amarelo);
-            box-shadow: 0 0 25px rgba(255, 204, 0, 0.4);
-        }
-        #videoFeed, #photoPreview {
-            width: 100%; height: 100%; object-fit: cover;
-            transform: scaleX(-1); -webkit-transform: scaleX(-1);
-        }
+        .audio-bar:nth-child(2) { animation-delay: 0.15s; }
+        .audio-bar:nth-child(3) { animation-delay: 0.3s; }
+        .audio-bar:nth-child(4) { animation-delay: 0.45s; }
     </style>
 </head>
-<body>
+<body class="bg-slate-50 text-slate-900 selection:bg-indigo-600 selection:text-white overflow-x-hidden font-sans">
 
-    <div class="animated-bg"></div>
-
-    <div class="max-w-md mx-auto min-h-screen flex flex-col pb-12">
-        
-        <div id="successModal" class="hidden fixed inset-0 z-[999] flex flex-col items-center justify-center px-6 bg-[#002b11]/98 backdrop-blur-xl overflow-y-auto py-8">
-            <p class="text-yellow-400 font-sport text-4xl mb-1 tracking-widest animate-bounce">CONVOCADO(A)!</p>
-            <p class="text-white text-[10px] font-black uppercase tracking-[3px] text-center mb-6">Tire print, poste nos stories e marque a @gabrieledionizzio</p>
-            
-            <div class="sticker-wrapper p-1 w-full max-w-xs mb-6">
-                <div class="bg-[#0033aa] p-5 rounded-[1.9rem] text-center border-4 border-yellow-400 relative overflow-hidden flex flex-col items-center">
-                    <div class="holo-overlay"></div>
-                    
-                    <div class="absolute top-3 left-4 flex gap-0.5 text-yellow-400 text-[8px]">⭐⭐⭐⭐⭐</div>
-                    <span id="badgeGender" class="absolute top-3 right-4 bg-yellow-400 text-black font-black text-[9px] px-2.5 py-0.5 rounded-full tracking-wider shadow-lg">JOGADORA</span>
-                    
-                    <div class="w-32 h-32 rounded-full border-4 border-yellow-400 overflow-hidden shadow-2xl mb-3 mt-4 relative z-10 bg-emerald-900">
-                        <img id="cardPhoto" src="" class="w-full h-full object-cover">
-                    </div>
-
-                    <h2 id="cardName" class="font-sport text-4xl text-yellow-400 leading-tight z-10 uppercase tracking-wide drop-shadow-md truncate max-w-full px-2">NOME DO CRAQUE</h2>
-                    
-                    <div class="mt-3 bg-black/40 border border-yellow-400/40 px-4 py-2.5 rounded-xl z-10 w-full backdrop-blur-md text-left space-y-1.5">
-                        <div>
-                            <p class="text-[8px] text-yellow-400 font-black uppercase tracking-widest mb-0.5">Posição Confirmada</p>
-                            <p id="cardPosition" class="text-xs font-bold text-white">Atacante do Open Bar</p>
-                        </div>
-                        <div class="h-px bg-white/10"></div>
-                        <div>
-                            <p class="text-[8px] text-emerald-300 font-black uppercase tracking-widest mb-0.5">Habilidade Especial Única</p>
-                            <p id="cardSkill" class="text-[11px] text-white/90 italic leading-snug font-medium">Carregando stats personalizados...</p>
-                        </div>
-                    </div>
-
-                    <div class="mt-4 flex justify-between items-center w-full z-10 px-1">
-                        <span id="cardOvr" class="text-[9px] font-black text-yellow-400 bg-black/40 border border-yellow-400/20 px-2 py-0.5 rounded">99 OVR</span>
-                        <div class="text-[8px] text-white/60 tracking-wider uppercase font-bold text-right">GABI CUP 2026<br><span class="text-yellow-400">★ SELEÇÃO HEXA ★</span></div>
-                    </div>
-                </div>
+    <!-- HEADER PREMIUM -->
+    <header class="bg-white/95 backdrop-blur-md sticky top-0 z-40 border-b border-slate-200/60 shadow-sm">
+        <div class="container mx-auto px-4 md:px-8 py-4 flex justify-between items-center">
+            <!-- Logo Sofisticada -->
+            <div class="flex flex-col">
+                <span class="text-2xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-slate-950 via-indigo-950 to-indigo-900">T4B</span>
+                <span class="text-[9px] font-bold text-slate-500 tracking-widest uppercase">Technology for Business</span>
             </div>
+            
+            <!-- Links Rápidos de Conversão -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-semibold text-slate-700">
+                <a href="#beneficios" class="hover:text-indigo-600 transition">Diferenciais</a>
+                <a href="#modelos" class="hover:text-indigo-600 transition">Modelos Premium</a>
+                <a href="#precos" class="hover:text-indigo-600 transition">Preços</a>
+                <a href="#faq" class="hover:text-indigo-600 transition">Dúvidas</a>
+            </nav>
 
-            <button onclick="closeModal()" class="w-full max-w-xs btn-gold py-4 rounded-2xl text-[11px] tracking-[0.3em] uppercase">Voltar ao Início</button>
+            <a href="https://wa.me/5561984672596?text=Olá!%20Achei%20o%20site%20da%20T4B%20muito%20lindo%20e%20gostaria%20de%20criar%20um%20convite%20digital%20interativo!" 
+               target="_blank" 
+               class="bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 px-6 rounded-full flex items-center gap-2 transition duration-300 shadow-md hover:shadow-lg hover:scale-105 text-sm">
+                <i class="fab fa-whatsapp text-lg"></i> Fale Conosco
+            </a>
         </div>
+    </header>
 
-        <section id="home" class="page active px-6 pt-10 space-y-8 animate-fade-in">
-            <header class="text-center space-y-2">
-                <p class="text-yellow-400 font-black tracking-[0.5em] text-[9px] uppercase animate-pulse">Rumo ao Hexa | 2026</p>
-                <h1 class="text-7xl font-sport leading-none premium-title">27 DA GAB'S</h1>
-                <div class="inline-flex items-center gap-3 bg-black/40 border border-yellow-400/30 px-5 py-2 rounded-full backdrop-blur-md shadow-lg">
-                    <span class="w-2.5 h-2.5 bg-yellow-400 rounded-full animate-ping"></span>
-                    <span class="text-[10px] font-black tracking-[0.2em] text-white">KICK-OFF EM: <span id="days">00</span>D : <span id="hours">00</span>H : <span id="mins">00</span>M</span>
-                </div>
-            </header>
+    <!-- HERO SECTION -->
+    <section class="relative bg-gradient-to-b from-slate-950 via-indigo-950 to-slate-900 text-white py-20 md:py-28 px-4 overflow-hidden">
+        <div class="absolute top-1/4 left-1/4 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
 
-            <div class="sticker-wrapper">
-                <div class="sticker-card">
-                    <div class="holo-overlay"></div>
-                    <img src="https://i.imgur.com/4DwHOAB.jpeg" class="w-full h-auto brightness-110">
-                    <div class="absolute top-5 left-5 bg-yellow-400 text-black font-sport text-4xl w-14 h-14 flex items-center justify-center rounded-2xl shadow-2xl border-2 border-white/40 transform -rotate-12">10</div>
-                    <div class="absolute bottom-6 left-0 right-0 text-center">
-                        <div class="inline-block bg-emerald-600 text-white px-6 py-1.5 rounded-full text-[10px] font-black tracking-[0.3em] border-2 border-yellow-400 shadow-xl">FIGURINHA LENDÁRIA</div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-                <div class="bg-black/30 border border-white/10 p-5 rounded-[2rem] text-center backdrop-blur-md shadow-lg">
-                    <p class="text-[8px] text-yellow-400 font-black uppercase tracking-widest mb-1">Abertura dos Portões</p>
-                    <p class="text-md font-bold text-white/95">06 JUN • 15h</p>
-                </div>
-                <a href="http://maps.google.com/?q=S%C3%A3o+Paulo" target="_blank" class="bg-black/30 border border-yellow-400/40 p-5 rounded-[2rem] text-center hover:bg-emerald-800/40 transition-all flex flex-col justify-center items-center backdrop-blur-md shadow-lg group">
-                    <p class="text-[8px] text-yellow-400 font-black uppercase tracking-widest mb-1">Localização</p>
-                    <p class="text-[10px] font-bold text-white mb-1 uppercase tracking-tighter">Ver no Mapa</p>
-                    <span class="text-[8px] font-black bg-yellow-400 text-black px-2 py-0.5 rounded uppercase transform group-hover:scale-105 transition-all">Clique Aqui 📍</span>
+        <div class="container mx-auto max-w-5xl text-center relative z-10">
+            <span class="inline-flex items-center gap-2 bg-indigo-500/20 text-indigo-300 text-xs md:text-sm font-bold px-4 py-1.5 rounded-full uppercase tracking-widest mb-6 border border-indigo-500/30">
+                <span class="w-2 h-2 rounded-full bg-indigo-400 animate-ping"></span> Tecnologia & Estética de Alto Padrão
+            </span>
+            <h1 class="text-3xl md:text-6xl font-extrabold mb-6 leading-tight tracking-tight text-white">
+                Seu Convite Digital em um <br class="hidden md:inline"> 
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-purple-300 to-pink-300">Link Interativo Exclusivo</span>
+            </h1>
+            <p class="text-base md:text-xl text-slate-300 mb-10 max-w-3xl mx-auto leading-relaxed font-normal">
+                Esqueça PDFs estáticos sem graça e convites tradicionais frios. Encante seus convidados com confirmação de presença dinâmica, rotas de GPS direto no Waze/Maps, listas de presentes seguras e PIX de forma simplificada.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4">
+                <a href="#modelos" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-lg py-4 px-10 rounded-2xl shadow-xl shadow-indigo-600/30 transition duration-300 transform hover:-translate-y-1 text-center">
+                    Experimentar Modelos <i class="fas fa-chevron-down ml-2 text-sm"></i>
+                </a>
+                <a href="https://wa.me/5561984672596?text=Quero%20fazer%20um%20orçamento%20de%20convite%20interativo!" 
+                   target="_blank" 
+                   class="w-full sm:w-auto bg-slate-800/90 hover:bg-slate-800 text-slate-200 border border-slate-700 hover:border-slate-600 font-bold text-lg py-4 px-10 rounded-2xl transition duration-300 text-center flex items-center justify-center gap-3">
+                    <i class="fab fa-whatsapp text-emerald-400 text-xl"></i> Orçamento Direto
                 </a>
             </div>
+        </div>
+    </section>
 
-            <div class="space-y-4 px-1">
-                <a href="https://instagram.com/gabrieledionizzio" target="_blank" class="flex items-center justify-between p-5 bg-gradient-to-r from-blue-900 to-blue-950 border border-yellow-400/30 rounded-[2.2rem] hover:border-yellow-400 transition-all group shadow-xl">
-                    <div class="flex items-center gap-4">
-                        <div class="w-12 h-12 bg-yellow-400 text-black font-bold rounded-2xl flex items-center justify-center text-xl shadow-lg transform group-hover:rotate-6 transition-all">📸</div>
-                        <div>
-                            <p class="text-[9px] font-black text-emerald-300 uppercase tracking-widest">Acompanhe no Instagram</p>
-                            <p class="font-bold text-lg tracking-tight text-white">@gabrieledionizzio</p>
-                        </div>
-                    </div>
-                    <span class="text-yellow-400 mr-2 opacity-80 transform group-hover:translate-x-1 transition-all">➔</span>
-                </a>
+    <!-- BENEFÍCIOS DO PRODUTO -->
+    <section id="beneficios" class="py-20 bg-white">
+        <div class="container mx-auto px-4 md:px-8 max-w-6xl">
+            <div class="text-center mb-16">
+                <span class="text-indigo-600 font-bold text-xs uppercase tracking-widest">Por que escolher a T4B?</span>
+                <h2 class="text-3xl font-extrabold mt-2 text-slate-900">A Tecnologia Ideal para Qualquer Evento</h2>
+                <p class="text-slate-600 mt-3 max-w-xl mx-auto text-sm md:text-base leading-relaxed">Garantimos a melhor experiência do mercado para os organizadores do evento e também para seus convidados.</p>
             </div>
 
-            <button onclick="showPage('rsvp')" class="w-full btn-gold py-6 rounded-[2.5rem] text-2xl font-sport tracking-[0.2em]">
-                Confirmar Convocação ⚽
-            </button>
-        </section>
-
-        <section id="rsvp" class="page px-6 pt-10">
-            <button onclick="showPage('home')" class="text-[10px] font-black text-yellow-400 mb-8 tracking-[4px] uppercase hover:text-white transition-all">← Voltar ao Início</button>
-            
-            <div id="step-1" class="space-y-6 declare-slide-up">
-                <div class="space-y-2">
-                    <h2 class="text-5xl font-sport text-yellow-400 leading-none">FAZER CHECK-IN</h2>
-                    <p class="text-[10px] uppercase tracking-widest text-emerald-300 font-bold">Monte os dados do seu passaporte oficial hexa.</p>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Benefício 1 -->
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-200/60 hover:border-indigo-200 hover:bg-indigo-50/20 transition duration-300">
+                    <div class="w-12 h-12 bg-indigo-100 text-indigo-600 rounded-2xl flex items-center justify-center text-xl mb-6">
+                        <i class="fas fa-location-dot"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-slate-900">Rotas Integradas</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed font-medium">Seu convidado abre o Waze ou o Google Maps com um clique de dentro do próprio convite.</p>
                 </div>
+                <!-- Benefício 2 -->
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-200/60 hover:border-indigo-200 hover:bg-indigo-50/20 transition duration-300">
+                    <div class="w-12 h-12 bg-pink-100 text-pink-600 rounded-2xl flex items-center justify-center text-xl mb-6">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-slate-900">RSVP Automatizado</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed font-medium">Acompanhe a lista de confirmados recebendo mensagens estruturadas direto no seu celular.</p>
+                </div>
+                <!-- Benefício 3 -->
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-200/60 hover:border-indigo-200 hover:bg-indigo-50/20 transition duration-300">
+                    <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-xl mb-6">
+                        <i class="fas fa-hand-holding-dollar"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-slate-900">PIX Copia e Cola</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed font-medium">Torne a contribuição de presentes super simples, rápida e extremamente elegante.</p>
+                </div>
+                <!-- Benefício 4 -->
+                <div class="bg-slate-50 p-8 rounded-3xl border border-slate-200/60 hover:border-indigo-200 hover:bg-indigo-50/20 transition duration-300">
+                    <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center text-xl mb-6">
+                        <i class="fas fa-music"></i>
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-slate-900">Trilha Sonora</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed font-medium">Adicione a trilha sonora ideal para emocionar e preparar seus convidados desde o primeiro segundo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VITRINE DE MODELOS COM FOTOS REAIS -->
+    <section id="modelos" class="py-20 bg-slate-100/70 border-y border-slate-200/50">
+        <div class="container mx-auto px-4 md:px-8 max-w-6xl">
+            <div class="text-center mb-16">
+                <span class="text-indigo-600 font-bold text-xs uppercase tracking-widest">Modelos em Destaque</span>
+                <h2 class="text-3xl font-extrabold mt-2 text-slate-900">Nossos Modelos Premium</h2>
+                <p class="text-slate-600 mt-3 max-w-2xl mx-auto text-sm md:text-base leading-relaxed">Clique em um dos botões abaixo para abrir o celular interativo e testar a riqueza de detalhes e recursos.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 
-                <div class="space-y-4">
-                    <input type="text" id="guestName" class="w-full bg-black/30 border-2 border-white/10 p-6 rounded-3xl text-xl focus:outline-none focus:border-yellow-400 transition-all text-white font-bold placeholder-white/20" placeholder="Seu Nome Completo">
-                    
-                    <div class="grid grid-cols-2 gap-3">
-                        <label class="gender-option block cursor-pointer">
-                            <input type="radio" name="gender" value="JOGADOR" class="hidden" checked>
-                            <div class="p-4 bg-black/20 rounded-2xl text-center font-black text-xs tracking-wider">⚽ JOGADOR</div>
-                        </label>
-                        <label class="gender-option block cursor-pointer">
-                            <input type="radio" name="gender" value="JOGADORA" class="hidden">
-                            <div class="p-4 bg-black/20 rounded-2xl text-center font-black text-xs tracking-wider">👑 JOGADORA</div>
-                        </label>
+                <!-- Modelo 1: Casamento Classic -->
+                <div class="bg-white rounded-3xl shadow-lg border border-slate-200/80 overflow-hidden flex flex-col justify-between group hover:scale-[1.02] transition duration-300">
+                    <div class="relative overflow-hidden h-64 bg-slate-200">
+                        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=600" 
+                             alt="Elegante casamento com flores" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <span class="absolute top-4 right-4 bg-rose-600 text-white text-[10px] font-bold tracking-widest uppercase px-3.5 py-1.5 rounded-full shadow-md">O Mais Vendido</span>
                     </div>
-
-                    <div class="space-y-2">
-                        <label class="text-[10px] font-black text-yellow-300 tracking-wider uppercase opacity-80">Escolha onde joga em campo:</label>
-                        <select id="playerPosition" class="w-full bg-[#002b11] border-2 border-white/10 p-5 rounded-2xl text-sm font-black text-white focus:outline-none focus:border-yellow-400 transition-all">
-                            <option value="Atacante do Open Bar">Atacante do Open Bar 🍻</option>
-                            <option value="Zagueiro(a) da Dignidade">Zagueiro(a) da Dignidade (Não deixa cair) 🛡️</option>
-                            <option value="Camisa 10 do Grupo">Camisa 10 do Grupo (O que agita) 👑</option>
-                            <option value="Meia de Ligação (Só fofoca)">Meia de Ligação (Leva e traz fofoca) 🗣️</option>
-                            <option value="Gandula de Gelo e Copo">Gandula de Gelo e Copo 🧊</option>
-                        </select>
-                    </div>
-
-                    <div class="bg-black/30 border-2 border-yellow-400/20 p-5 rounded-3xl space-y-4 text-center backdrop-blur-md">
-                        <p class="text-[10px] font-black text-yellow-400 tracking-wider uppercase">Bata a Foto do seu Passaporte:</p>
+                    <div class="p-8">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i class="fas fa-ring text-rose-500"></i>
+                            <span class="text-xs font-bold text-rose-500 uppercase tracking-wider">Casamentos & Noivados</span>
+                        </div>
+                        <h3 class="text-xl font-extrabold text-slate-900 mb-3">Classic Wedding Rose</h3>
+                        <p class="text-slate-600 text-sm mb-6 leading-relaxed">Minimalismo caligráfico, paleta rosé gold, manual dos padrinhos, mapa interativo e contagem regressiva viva.</p>
                         
-                        <div id="cameraContainer">
-                            <video id="videoFeed" autoplay playsinline></video>
-                            <img id="photoPreview" class="hidden">
+                        <div class="border-t border-slate-200 pt-5 space-y-2">
+                            <p class="text-xs font-bold text-slate-800 uppercase tracking-wider">Recursos Premium Inclusos:</p>
+                            <div class="grid grid-cols-2 gap-y-2 text-xs font-medium text-slate-600">
+                                <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Música de Fundo</span>
+                                <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Manual dos Padrinhos</span>
+                                <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Lista em PIX Integrada</span>
+                                <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Cronômetro Vivo</span>
+                            </div>
                         </div>
-
-                        <div class="flex justify-center gap-3">
-                            <button type="button" id="btnCapture" onclick="capturePhoto()" class="bg-yellow-400 text-black font-black text-[11px] tracking-widest px-6 py-3 rounded-xl uppercase shadow-lg active:scale-95 transition-all">Capturar Foto 📸</button>
-                            <button type="button" id="btnRetake" onclick="startCamera()" class="hidden bg-white/10 border border-white/20 text-white font-black text-[11px] tracking-widest px-6 py-3 rounded-xl uppercase active:scale-95 transition-all">Tirar Outra 🔄</button>
-                        </div>
-                        <canvas id="photoCanvas" class="hidden" width="300" height="300"></canvas>
                     </div>
-
-                    <p id="errorMsg" class="hidden text-orange-400 text-[10px] font-black uppercase tracking-widest text-center animate-pulse">⚠️ Nome obrigatório e tire sua foto!</p>
-                    <button onclick="goToGifts()" class="w-full bg-white text-black font-black py-6 rounded-3xl font-sport text-2xl tracking-[0.1em] shadow-xl">AVANÇAR PARA OS PRESENTES</button>
+                    <div class="p-8 pt-0">
+                        <button onclick="abrirSimulador('casamento')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-6 rounded-2xl transition duration-300 text-center flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-indigo-600/10">
+                            <i class="fas fa-mobile-screen-button"></i> Testar Interatividade
+                        </button>
+                    </div>
                 </div>
+
+                <!-- Modelo 2: Infantil Safari -->
+                <div class="bg-white rounded-3xl shadow-lg border border-slate-200/80 overflow-hidden flex flex-col justify-between group hover:scale-[1.02] transition duration-300">
+                    <div class="relative overflow-hidden h-64 bg-slate-200">
+                        <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&q=80&w=600" 
+                             alt="Decoração infantil alegre" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <span class="absolute top-4 right-4 bg-emerald-600 text-white text-[10px] font-bold tracking-widest uppercase px-3.5 py-1.5 rounded-full shadow-md">Super Divertido</span>
+                    </div>
+                    <div class="p-8">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i class="fas fa-paw text-emerald-500"></i>
+                            <span class="text-xs font-bold text-emerald-500 uppercase tracking-wider">Aniversários de Criança</span>
+                        </div>
+                        <h3 class="text-xl font-extrabold text-slate-900 mb-3">Safari Aventuras</h3>
+                        <p class="text-slate-600 text-sm mb-6 leading-relaxed">Cores vibrantes, ilustrações lúdicas, cronograma completo das brincadeiras e sugestões de presentes com tamanhos.</p>
+                        
+                        <div class="border-t border-slate-200 pt-5 space-y-2">
+                            <p class="text-xs font-bold text-slate-800 uppercase tracking-wider">Recursos Premium Inclusos:</p>
+                            <div class="grid grid-cols-2 gap-y-2 text-xs font-medium text-slate-600">
+                                <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Lista de Presentes</span>
+                                <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Cronograma de Atrações</span>
+                                <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Confirmação RSVP</span>
+                                <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Dicas de Vestuário</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-8 pt-0">
+                        <button onclick="abrirSimulador('infantil')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-6 rounded-2xl transition duration-300 text-center flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-indigo-600/10">
+                            <i class="fas fa-mobile-screen-button"></i> Testar Interatividade
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Modelo 3: Formatura/Gala -->
+                <div class="bg-white rounded-3xl shadow-lg border border-slate-200/80 overflow-hidden flex flex-col justify-between group hover:scale-[1.02] transition duration-300">
+                    <div class="relative overflow-hidden h-64 bg-slate-200">
+                        <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&q=80&w=600" 
+                             alt="Evento de gala" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        <span class="absolute top-4 right-4 bg-amber-500 text-white text-[10px] font-bold tracking-widest uppercase px-3.5 py-1.5 rounded-full shadow-md">Elegância Máxima</span>
+                    </div>
+                    <div class="p-8">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i class="fas fa-graduation-cap text-amber-500"></i>
+                            <span class="text-xs font-bold text-amber-500 uppercase tracking-wider">Formatura & Festas Elegantes</span>
+                        </div>
+                        <h3 class="text-xl font-extrabold text-slate-900 mb-3">Gala Luxury & Black Gold</h3>
+                        <p class="text-slate-600 text-sm mb-6 leading-relaxed">Design refinado em preto e dourado com controle de abas para cronogramas, traje sugerido e localização VIP.</p>
+                        
+                        <div class="border-t border-slate-200 pt-5 space-y-2">
+                            <p class="text-xs font-bold text-slate-800 uppercase tracking-wider">Recursos Premium Inclusos:</p>
+                            <div class="grid grid-cols-2 gap-y-2 text-xs font-medium text-slate-600">
+                                <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Abas de Conteúdo</span>
+                                <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Dress Code Social</span>
+                                <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> RSVP Integrado</span>
+                                <span class="flex items-center gap-1.5"><i class="fas fa-check text-emerald-500"></i> Sugestão de Hotéis</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-8 pt-0">
+                        <button onclick="abrirSimulador('corporativo')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-6 rounded-2xl transition duration-300 text-center flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-indigo-600/10">
+                            <i class="fas fa-mobile-screen-button"></i> Testar Interatividade
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- SMARTPHONE VIRTUAL REALISTA -->
+    <div id="modalSimulador" class="opacity-0 pointer-events-none fixed inset-0 flex items-center justify-center z-50 transition-all duration-300">
+        <div class="absolute inset-0 bg-slate-950/80 backdrop-blur-md" onclick="fecharSimulador()"></div>
+        
+        <div class="relative bg-slate-950 w-[350px] h-[720px] rounded-[52px] border-[12px] border-slate-800 shadow-[0_25px_60px_-15px_rgba(0,0,0,0.9)] z-50 overflow-hidden flex flex-col transform scale-90 md:scale-100 transition-transform duration-300">
+            <!-- Ilha Dinâmica -->
+            <div class="absolute top-2.5 left-1/2 transform -translate-x-1/2 w-28 h-5.5 bg-slate-800 rounded-full z-50 flex items-center justify-center">
+                <div class="w-2 h-2 bg-indigo-900 rounded-full mr-2"></div>
+                <div class="w-1.5 h-1.5 bg-slate-950 rounded-full"></div>
             </div>
 
-            <div id="step-2" class="hidden space-y-8 animate-slide-up">
-                <div class="space-y-2">
-                    <h2 class="text-5xl font-sport text-yellow-400">ESCOLHA O PRESENTINHO</h2>
-                    <p class="text-[10px] text-emerald-300 uppercase tracking-widest font-black">Escalação Obrigatória de Presente para a Gabi:</p>
-                </div>
-
-                <div class="space-y-3" id="giftList">
-                    <label class="gift-option block relative cursor-pointer group">
-                        <input type="checkbox" value="Voucher Sephora" class="hidden">
-                        <div class="p-6 bg-black/20 rounded-3xl flex justify-between items-center">
-                            <span class="font-black tracking-wide text-md">Voucher Sephora</span>
-                            <div class="w-3.5 h-3.5 rounded-full bg-white/10 dot"></div>
-                        </div>
-                    </label>
-
-                    <label class="gift-option block relative cursor-pointer group">
-                        <input type="checkbox" value="Kit Blogueira Camisa 10" class="hidden">
-                        <div class="p-6 bg-black/20 rounded-3xl flex justify-between items-center">
-                            <span class="font-black tracking-wide text-md">Kit Blogueira Camisa 10</span>
-                            <div class="w-3.5 h-3.5 rounded-full bg-white/10 dot"></div>
-                        </div>
-                    </label>
-
-                    <label class="gift-option block relative cursor-pointer group">
-                        <input type="checkbox" value="Mimo via PIX" class="hidden">
-                        <div class="p-6 bg-yellow-500/10 border-2 border-yellow-500/30 rounded-3xl flex justify-between items-center">
-                            <span class="font-black text-yellow-300 italic text-md">Mimo de Craque via PIX (Qualquer valor)</span>
-                            <div class="w-3.5 h-3.5 rounded-full bg-yellow-500/20 dot"></div>
-                        </div>
-                    </label>
-                </div>
-
-                <div class="text-center p-6 bg-black/40 rounded-[2rem] border-2 border-dashed border-yellow-400/30">
-                    <p class="text-[9px] font-black text-yellow-300 uppercase tracking-[0.3em] mb-2">Chave Oficial (Copiar Chave)</p>
-                    <code class="block text-sm font-mono mb-2 text-white/90 select-all tracking-wide">pixdagabi@influencer.com</code>
-                    <p class="text-[8px] font-bold text-emerald-300 uppercase tracking-widest">Toque sob o texto para copiar</p>
-                </div>
-
-                <div class="space-y-4">
-                    <p id="giftError" class="hidden text-orange-400 text-[10px] text-center font-black uppercase tracking-widest animate-pulse">⚠️ Escolha um presente antes de finalizar!</p>
-                    <button onclick="finalizarConfirmacao()" class="w-full btn-gold py-6 rounded-[2.5rem] font-sport text-3xl tracking-[0.2em]">FINALIZAR MINHA ESCALAÇÃO 📱</button>
-                </div>
+            <!-- Tela de Display do Smartphone -->
+            <div id="telaSmartphone" class="flex-grow overflow-y-auto bg-white pt-10 pb-4 px-4 no-scrollbar">
+                <!-- Conteúdo dinâmico -->
             </div>
-        </section>
 
-        <footer class="mt-auto px-6 text-center animate-fade-in">
-            <div class="h-px bg-gradient-to-r from-transparent via-yellow-400/30 to-transparent w-full mb-10"></div>
-            <p class="text-[9px] font-black text-white/30 uppercase tracking-[0.5em] mb-3">Designed by Elite Systems</p>
-            <div class="inline-block bg-black/30 px-10 py-3 rounded-2xl border border-white/10 shadow-xl">
-                <p class="text-xl font-sport text-yellow-400 tracking-[5px]">RENATO BRILHANTE</p>
+            <!-- Rodapé Home Bar -->
+            <div class="h-6 bg-white flex items-center justify-center pb-2 rounded-b-[40px] border-t border-slate-100 shrink-0">
+                <div class="w-28 h-1 bg-slate-300 rounded-full"></div>
             </div>
-        </footer>
+
+            <!-- Botão de Fechar Superior Direito -->
+            <button onclick="fecharSimulador()" class="absolute top-3 right-5 bg-slate-950/70 text-white hover:bg-slate-950 w-8 h-8 rounded-full flex items-center justify-center shadow-lg transition duration-200 cursor-pointer border border-slate-700 z-50">
+                <i class="fas fa-times text-xs"></i>
+            </button>
+        </div>
     </div>
 
+    <!-- TOAST NOTIFICATION PREMIUM -->
+    <div id="toastNotification" class="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-slate-900 text-white px-6 py-3 rounded-2xl shadow-xl z-50 flex items-center gap-3 transition-all duration-300 translate-y-20 opacity-0 pointer-events-none">
+        <i class="fas fa-circle-check text-emerald-400 text-lg"></i>
+        <span id="toastMessage" class="text-xs font-bold font-sans">Texto copiado!</span>
+    </div>
+
+    <!-- SEÇÃO COMO FUNCIONA -->
+    <section id="como-funciona" class="bg-white py-20 border-b border-slate-200/50">
+        <div class="container mx-auto px-4 md:px-8 max-w-5xl">
+            <div class="text-center mb-16">
+                <span class="text-indigo-600 font-bold text-xs uppercase tracking-widest">Processo Facilitado</span>
+                <h2 class="text-3xl font-extrabold mt-2 text-slate-900">Como Criar o Seu Convite Conosco?</h2>
+                <p class="text-slate-600 mt-2 text-sm md:text-base leading-relaxed">Produção simplificada, rápida e totalmente focada em arrancar suspiros dos convidados.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+                <div class="hidden md:block absolute top-10 left-[15%] right-[15%] h-0.5 bg-indigo-100 z-0"></div>
+                
+                <!-- Passo 1 -->
+                <div class="relative z-10 text-center flex flex-col items-center">
+                    <div class="w-16 h-16 bg-indigo-600 text-white font-extrabold text-lg rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-600/20 mb-6">
+                        01
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-slate-900">Defina os Detalhes</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed px-4 font-medium">Fale conosco pelo WhatsApp, envie as informações básicas do evento e escolha seu modelo favorito.</p>
+                </div>
+
+                <!-- Passo 2 -->
+                <div class="relative z-10 text-center flex flex-col items-center">
+                    <div class="w-16 h-16 bg-indigo-600 text-white font-extrabold text-lg rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-600/20 mb-6">
+                        02
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-slate-900">Montagem Personalizada</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed px-4 font-medium">Nossa equipe insere suas fotos, escolhe a música ideal, configura as rotas exatas de GPS e sua chave PIX de presentes.</p>
+                </div>
+
+                <!-- Passo 3 -->
+                <div class="relative z-10 text-center flex flex-col items-center">
+                    <div class="w-16 h-16 bg-indigo-600 text-white font-extrabold text-lg rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-600/20 mb-6">
+                        03
+                    </div>
+                    <h3 class="font-bold text-lg mb-2 text-slate-900">Seu Link está no Ar!</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed px-4 font-medium">Você recebe o link exclusivo da T4B para enviar por WhatsApp ou incorporar em um QR Code de forma ilimitada.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TABELA DE PREÇOS -->
+    <section id="precos" class="py-20 bg-slate-50">
+        <div class="container mx-auto px-4 md:px-8 max-w-5xl">
+            <div class="text-center mb-16">
+                <span class="text-indigo-600 font-bold text-xs uppercase tracking-widest">Preço Justo e Transparente</span>
+                <h2 class="text-3xl font-extrabold mt-2 text-slate-900">Nossos Planos Promocionais</h2>
+                <p class="text-slate-600 mt-2 text-sm md:text-base leading-relaxed">Invista em tecnologia que otimiza sua festa e gera economia.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+                <!-- Plano Essencial -->
+                <div class="bg-white p-8 rounded-3xl border border-slate-200 shadow-md flex flex-col justify-between">
+                    <div>
+                        <span class="text-slate-500 text-xs font-bold tracking-widest uppercase">Plano Silver</span>
+                        <h3 class="text-2xl font-black text-slate-900 mt-1">Convite Prático</h3>
+                        <p class="text-slate-500 text-sm mt-2">Perfeito para quem quer praticidade sem abrir mão de um design limpo e moderno.</p>
+                        
+                        <div class="my-6">
+                            <span class="text-3xl font-black text-slate-900">R$ 89,90</span>
+                            <span class="text-slate-400 text-xs font-semibold block mt-1">Pagamento Único, sem mensalidade</span>
+                        </div>
+
+                        <ul class="space-y-3 text-sm font-medium text-slate-600 border-t border-slate-100 pt-6">
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500"></i> Botão GPS direto no Maps</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500"></i> RSVP via WhatsApp</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-500"></i> Hospedado por 60 dias</li>
+                            <li class="flex items-center gap-2 text-slate-300"><i class="fas fa-times"></i> Música de Fundo</li>
+                            <li class="flex items-center gap-2 text-slate-300"><i class="fas fa-times"></i> Painel de Presentes/Pix</li>
+                        </ul>
+                    </div>
+                    <a href="https://wa.me/5561984672596?text=Olá!%20Gostaria%20de%20encomendar%20o%20Plano%20Prático%20Silver%20da%20T4B" target="_blank" class="block text-center bg-slate-900 hover:bg-slate-800 text-white font-bold py-3.5 px-6 rounded-2xl transition mt-8 text-sm">
+                        Quero o Plano Prático
+                    </a>
+                </div>
+
+                <!-- Plano VIP Premium -->
+                <div class="bg-slate-950 text-white p-8 rounded-3xl border-2 border-indigo-500 shadow-xl flex flex-col justify-between relative">
+                    <span class="absolute -top-3 right-8 bg-indigo-600 text-white text-[9px] font-black tracking-widest uppercase px-3.5 py-1.5 rounded-full shadow-lg">Mais Escolhido</span>
+                    <div>
+                        <span class="text-indigo-400 text-xs font-bold tracking-widest uppercase">Plano Golden Gold</span>
+                        <h3 class="text-2xl font-black text-white mt-1">Interatividade Premium</h3>
+                        <p class="text-slate-400 text-sm mt-2">A experiência completa dos modelos com todas as funcionalidades e alta personalização.</p>
+                        
+                        <div class="my-6">
+                            <span class="text-3xl font-black text-white">R$ 149,90</span>
+                            <span class="text-slate-400 text-xs font-semibold block mt-1">Pagamento Único, sem mensalidade</span>
+                        </div>
+
+                        <ul class="space-y-3 text-sm font-medium text-slate-300 border-t border-slate-800 pt-6">
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-400"></i> Botões ilimitados (Maps/Waze)</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-400"></i> Trilha Sonora de Fundo Exclusiva</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-400"></i> Lista de presentes com Pix Copia/Cola</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-400"></i> Manual dos Padrinhos / Dress Code</li>
+                            <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-400"></i> Hospedagem ativa por 1 Ano</li>
+                        </ul>
+                    </div>
+                    <a href="https://wa.me/5561984672596?text=Olá!%20Gostaria%20de%20encomendar%20o%20Plano%20Premium%20Golden%20da%20T4B" target="_blank" class="block text-center bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-6 rounded-2xl transition mt-8 text-sm shadow-lg shadow-indigo-600/20">
+                        Quero o Plano Premium
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SEÇÃO DE FAQ (Perguntas Frequentes) -->
+    <section id="faq" class="py-20 bg-white">
+        <div class="container mx-auto px-4 md:px-8 max-w-4xl">
+            <div class="text-center mb-16">
+                <span class="text-indigo-600 font-bold text-xs uppercase tracking-widest">Sem Dúvidas</span>
+                <h2 class="text-3xl font-extrabold mt-2 text-slate-900">Respostas Rápidas</h2>
+            </div>
+
+            <div class="space-y-4">
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200/60 shadow-sm">
+                    <h4 class="font-bold text-slate-900 flex justify-between items-center text-sm md:text-base cursor-pointer" onclick="toggleFaq(this)">
+                        <span>Como os convidados acessam o convite interativo?</span>
+                        <i class="fas fa-chevron-down text-xs text-slate-500 transition-transform"></i>
+                    </h4>
+                    <p class="text-slate-600 text-sm mt-3 leading-relaxed hidden font-medium">
+                        Você receberá um link limpo e estilizado da T4B (ex: t4b.com.br/nosso-casamento). Basta enviar este link no WhatsApp de cada convidado. Ele funciona instantaneamente sem precisar baixar nada.
+                    </p>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200/60 shadow-sm">
+                    <h4 class="font-bold text-slate-900 flex justify-between items-center text-sm md:text-base cursor-pointer" onclick="toggleFaq(this)">
+                        <span>Dá pra colocar música de verdade tocando de fundo?</span>
+                        <i class="fas fa-chevron-down text-xs text-slate-500 transition-transform"></i>
+                    </h4>
+                    <p class="text-slate-600 text-sm mt-3 leading-relaxed hidden font-medium">
+                        Com certeza! No Plano Premium, nós configuramos um player de música suave que começa a tocar assim que o convidado abre a tela e clica para aceitar a trilha sonora. É super emocionante.
+                    </p>
+                </div>
+
+                <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200/60 shadow-sm">
+                    <h4 class="font-bold text-slate-900 flex justify-between items-center text-sm md:text-base cursor-pointer" onclick="toggleFaq(this)">
+                        <span>Consigo alterar alguma informação caso ocorra algum imprevisto?</span>
+                        <i class="fas fa-chevron-down text-xs text-slate-500 transition-transform"></i>
+                    </h4>
+                    <p class="text-slate-600 text-sm mt-3 leading-relaxed hidden font-medium">
+                        Sim! Por ser baseado em nuvem, se houver alteração de horário, local ou protocolo, nós atualizamos o painel e o mesmo link já exibe a nova informação na mesma hora para todos.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER / CHAMADA FINAL -->
+    <footer class="bg-slate-950 text-white py-16 px-4 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-indigo-950/20 to-slate-950"></div>
+        
+        <div class="container mx-auto max-w-2xl text-center relative z-10">
+            <span class="text-indigo-400 text-xs font-bold tracking-widest uppercase mb-4 block font-mono">Vamos Começar?</span>
+            <h2 class="text-3xl md:text-4xl font-extrabold mb-4 leading-tight">O Seu Evento Merece a T4B</h2>
+            <p class="text-slate-400 mb-8 text-sm md:text-base leading-relaxed font-medium">
+                Nossa equipe de atendimento especializado está online agora mesmo no WhatsApp para transformar suas ideias em uma belíssima obra prima digital interativa.
+            </p>
+            
+            <a href="https://wa.me/5561984672596?text=Olá!%20Desejo%20solicitar%20um%20projeto%20de%20convite%20interativo%20com%20a%20T4B!" 
+               target="_blank" 
+               class="bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-lg py-5 px-10 rounded-2xl inline-flex items-center gap-3 shadow-xl shadow-emerald-500/30 transition duration-300 transform hover:scale-105">
+                <i class="fab fa-whatsapp text-2xl"></i> Encomendar via WhatsApp
+            </a>
+
+            <div class="mt-16 pt-8 border-t border-slate-800/80 text-xs text-slate-500 space-y-2">
+                <p class="font-bold text-slate-300 tracking-wider">T4B - TECHNOLOGY FOR BUSINESS</p>
+                <p>Suporte Especializado: <a href="tel:5561984672596" class="hover:text-white transition font-bold">(61) 98467-2596</a> | Brasília - DF</p>
+                <p class="text-[10px] text-slate-600 mt-4">&copy; 2026 T4B. Todos os direitos reservados. Foco em Tecnologia e Resultados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERATIVIDADE JAVASCRIPT DOS SIMULADORES E RSVP DINÂMICO -->
     <script>
-        const WHATSAPP_NUMERO = "5511999999999"; 
-        const DATA_EVENTO = new Date('June 6, 2026 15:00:00').getTime();
+        let timerInterval = null;
+        let audioPlayingSimulated = false;
 
-        let localStream = null;
-        let fotoCapturadaDataUrl = null;
-
-        // BANCO DE DADOS DE ENGENHARIA DE FRASES RANDÔMICAS PARA ENGAJAMENTO
-        const COMPONENTES_HABILIDADE = {
-            "Atacante do Open Bar": {
-                status: ["Fôlego Etílico", "Drible no Garçom", "Pontaria de Shot"],
-                frases: [
-                    "Sabe a hora exata de parar, mas decide ignorar com maestria.",
-                    "Artilheiro isolado da pista. Promete zerar os estoques de destilados em tempo recorde.",
-                    "Especialista em pedir o próximo combo enquanto o atual nem chegou na mesa.",
-                    "Tem precisão cirúrgica para encontrar copos vazios num raio de 50 metros."
-                ]
-            },
-            "Zagueiro(a) da Dignidade": {
-                status: ["Bloqueio de Ex", "Resistência Física", "Defesa de Queda"],
-                frases: [
-                    "Muralha inviolável. Não deixa ninguém cair no chão nem mandar textão de madrugada.",
-                    "Responsável tático por segurar o cabelo das amigas e confiscar celulares perigosos.",
-                    "Garante que o time volte inteiro para casa sem perder o RG ou o bom senso.",
-                    "O verdadeiro anjo da guarda da pista. Neutraliza 100% dos tombos iminentes."
-                ]
-            },
-            "Camisa 10 do Grupo": {
-                status: ["Visão de Jogo", "Passe de Fofoca", "Carisma Lendário"],
-                frases: [
-                    "Dono do passe milimétrico que inflama qualquer rodinha de conversa na VIP.",
-                    "Dita o ritmo do evento. Se o camisa 10 tá bebendo, o time tá ganhando.",
-                    "Capacidade fora do comum de fazer amizade até com os seguranças da festa.",
-                    "O arquiteto do rolê. Sem ele, a energia do camarote cairia para a segunda divisão."
-                ]
-            },
-            "Meia de Ligação (Só fofoca)": {
-                status: ["Radar de VIP", "Velocidade de Áudio", "Controle de Campo"],
-                frases: [
-                    "Conecta todos os setores do evento trazendo as informações mais quentes da rodada.",
-                    "Descobre quem tá pegando quem antes mesmo do casal perceber o clima.",
-                    "Especialista em mapear os melhores ângulos e fofocas em tempo real.",
-                    "Sua leitura de jogo social é mais rápida que a internet 5G do evento."
-                ]
-            },
-            "Gandula de Gelo e Copo": {
-                status: ["Suporte Tático", "Velocidade de Gelo", "Reposicionamento"],
-                frases: [
-                    "Trabalho sujo impecável! O herói que nunca deixa o time ficar com copo quente.",
-                    "Abastecimento premium garantido. Corre mais que os atacantes para buscar energético.",
-                    "Invisível na pista, mas vital para manter os copos cheios e a dignidade gelada.",
-                    "O pilar logístico da noite. Sua velocidade para achar gelo seco quebra recordes mundiais."
-                ]
-            }
-        };
-
-        // FUNÇÃO QUE GERA A FRASE DA CARTEIRINHA DE FORMA TOTALMENTE INDIVIDUAL
-        function gerarHabilidadeUnica(posicao) {
-            const config = COMPONENTES_HABILIDADE[posicao] || { status: ["Raridade"], frases: ["Craque nato indescritível."] };
+        // Controle do cronômetro real do casamento no simulador
+        function iniciarCronometro() {
+            if (timerInterval) clearInterval(timerInterval);
             
-            // Sorteia elementos aleatórios
-            const statusSorteado = config.status[Math.floor(Math.random() * config.status.length)];
-            const fraseSorteada = config.frases[Math.floor(Math.random() * config.frases.length)];
-            const notaStatus = Math.floor(Math.random() * 15) + 85; // Notas lendárias entre 85 e 99
+            const dataAlvo = new Date();
+            dataAlvo.setDate(dataAlvo.getDate() + 45); // Define para 45 dias futuros
 
-            return `[${statusSorteado}: ${notaStatus}] — ${fraseSorteada}`;
+            timerInterval = setInterval(() => {
+                const agora = new Date().getTime();
+                const diferenca = dataAlvo - agora;
+
+                const dias = Math.floor(diferenca / (1000 * 60 * 60 * 24));
+                const horas = Math.floor((diferenca % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutos = Math.floor((diferenca % (1000 * 60 * 60)) / (1000 * 60));
+                const segundos = Math.floor((diferenca % (1000 * 60)) / 1000);
+
+                const domDias = document.getElementById('cronometro-dias');
+                const domHoras = document.getElementById('cronometro-horas');
+                const domMinutos = document.getElementById('cronometro-minutos');
+                const domSegundos = document.getElementById('cronometro-segundos');
+
+                if (domDias && domHoras && domMinutos && domSegundos) {
+                    domDias.innerText = String(dias).padStart(2, '0');
+                    domHoras.innerText = String(horas).padStart(2, '0');
+                    domMinutos.innerText = String(minutos).padStart(2, '0');
+                    domSegundos.innerText = String(segundos).padStart(2, '0');
+                } else {
+                    clearInterval(timerInterval);
+                }
+            }, 1000);
         }
 
-        function updateTimer() {
-            const ago = new Date().getTime();
-            const d = DATA_EVENTO - ago;
-            if (d < 0) return;
-            document.getElementById('days').innerText = String(Math.floor(d / (1000*60*60*24))).padStart(2, '0');
-            document.getElementById('hours').innerText = String(Math.floor((d % (1000*60*60*24)) / (1000*60*60))).padStart(2, '0');
-            document.getElementById('mins').innerText = String(Math.floor((d % (1000*60*60)) / (1000*60))).padStart(2, '0');
-        }
-        setInterval(updateTimer, 1000);
-        updateTimer();
-
-        function showPage(id) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        function showToast(mensagem) {
+            const toast = document.getElementById('toastNotification');
+            const msg = document.getElementById('toastMessage');
+            msg.innerText = mensagem;
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
             
-            if(id === 'rsvp') {
-                startCamera();
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+            }, 3000);
+        }
+
+        // Simulação do player de áudio (Visual)
+        function toggleAudioSimulado() {
+            audioPlayingSimulated = !audioPlayingSimulated;
+            const waves = document.getElementById('wave-animation');
+            const audioBtnText = document.getElementById('audio-btn-text');
+            const audioIcon = document.getElementById('audio-icon');
+
+            if (audioPlayingSimulated) {
+                waves.classList.remove('hidden');
+                audioIcon.className = "fas fa-pause";
+                audioBtnText.innerText = "Música Ativa (Pausar)";
+                showToast("🎵 Música 'Escolha dos Noivos' simulada com sucesso!");
             } else {
-                stopCamera();
+                waves.classList.add('hidden');
+                audioIcon.className = "fas fa-play";
+                audioBtnText.innerText = "Tocar Música de Fundo";
             }
         }
 
-        async function startCamera() {
-            try {
-                fotoCapturadaDataUrl = null;
-                document.getElementById('videoFeed').classList.remove('hidden');
-                document.getElementById('photoPreview').classList.add('hidden');
-                document.getElementById('btnCapture').classList.remove('hidden');
-                document.getElementById('btnRetake').classList.add('hidden');
+        // Cópia elegante do PIX sem alert do navegador
+        function copiarPixSimulado() {
+            const keyText = "pix@t4bconvites.com.br";
+            const el = document.createElement('textarea');
+            el.value = keyText;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            
+            showToast("Chave PIX copiada para a área de transferência!");
+        }
 
-                localStream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { facingMode: "user", width: 300, height: 300 } 
-                });
-                document.getElementById('videoFeed').srcObject = localStream;
-            } catch (err) {
-                console.log("Câmera indisponível no dispositivo.");
+        // Navegação de abas do simulador corporativo
+        function trocarAbaCorporativa(aba) {
+            const btnCronograma = document.getElementById('btn-aba-cronograma');
+            const btnComoChegar = document.getElementById('btn-aba-chegar');
+            const btnTraje = document.getElementById('btn-aba-traje');
+            
+            const contCronograma = document.getElementById('conteudo-aba-cronograma');
+            const contComoChegar = document.getElementById('conteudo-aba-chegar');
+            const contTraje = document.getElementById('conteudo-aba-traje');
+
+            // Reset classes
+            const btns = [btnCronograma, btnComoChegar, btnTraje];
+            const conts = [contCronograma, contComoChegar, contTraje];
+            
+            btns.forEach(b => b.classList.replace('bg-amber-500', 'bg-slate-800'));
+            btns.forEach(b => b.classList.replace('text-slate-950', 'text-slate-300'));
+            conts.forEach(c => c.classList.add('hidden'));
+
+            if (aba === 'cronograma') {
+                btnCronograma.classList.replace('bg-slate-800', 'bg-amber-500');
+                btnCronograma.classList.replace('text-slate-300', 'text-slate-950');
+                contCronograma.classList.remove('hidden');
+            } else if (aba === 'chegar') {
+                btnComoChegar.classList.replace('bg-slate-800', 'bg-amber-500');
+                btnComoChegar.classList.replace('text-slate-300', 'text-slate-950');
+                contComoChegar.classList.remove('hidden');
+            } else if (aba === 'traje') {
+                btnTraje.classList.replace('bg-slate-800', 'bg-amber-500');
+                btnTraje.classList.replace('text-slate-300', 'text-slate-950');
+                contTraje.classList.remove('hidden');
             }
         }
 
-        function capturePhoto() {
-            const video = document.getElementById('videoFeed');
-            const canvas = document.getElementById('photoCanvas');
-            const ctx = canvas.getContext('2d');
-
-            ctx.translate(canvas.width, 0);
-            ctx.scale(-1, 1);
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            ctx.setTransform(1, 0, 0, 1, 0, 0);
-
-            fotoCapturadaDataUrl = canvas.toDataURL('image/jpeg');
+        // Envio fictício do formulário RSVP no celular simulado
+        function enviarRsvpSimulado(event) {
+            event.preventDefault();
+            const nome = document.getElementById('rsvp-nome').value;
+            const convidados = document.getElementById('rsvp-quantidade').value;
             
-            document.getElementById('photoPreview').src = fotoCapturadaDataUrl;
-            document.getElementById('videoFeed').classList.add('hidden');
-            document.getElementById('photoPreview').classList.remove('hidden');
-            document.getElementById('btnCapture').classList.add('hidden');
-            document.getElementById('btnRetake').classList.remove('hidden');
-
-            stopCamera();
+            showToast(`Obrigado, ${nome}! Confirmação de ${convidados} pessoa(s) enviada de forma fictícia.`);
+            document.getElementById('rsvp-nome').value = '';
         }
 
-        function stopCamera() {
-            if (localStream) {
-                localStream.getTracks().forEach(track => track.stop());
+        // Drawer da lista de presentes/PIX no celular do casamento
+        function abrirGavetaPix() {
+            const drawer = document.getElementById('gaveta-pix');
+            if (drawer) drawer.classList.replace('translate-y-full', 'translate-y-0');
+        }
+
+        function fecharGavetaPix() {
+            const drawer = document.getElementById('gaveta-pix');
+            if (drawer) drawer.classList.replace('translate-y-0', 'translate-y-full');
+        }
+
+        // Carregamento inteligente dos modelos reais para simular no celular
+        function abrirSimulador(tipo) {
+            const modal = document.getElementById('modalSimulador');
+            const tela = document.getElementById('telaSmartphone');
+            let htmlInner = '';
+
+            tela.scrollTop = 0;
+            audioPlayingSimulated = false;
+
+            if (tipo === 'casamento') {
+                htmlInner = `
+                    <div class="font-wedding text-center relative min-h-full flex flex-col justify-between pb-4">
+                        <div>
+                            <!-- Música de Fundo Simulada -->
+                            <div class="bg-rose-50 border border-rose-200/50 p-2 rounded-2xl mb-4 flex items-center justify-between font-sans px-3">
+                                <button onclick="toggleAudioSimulado()" class="flex items-center gap-2 text-[10px] font-bold text-rose-600 bg-white border border-rose-300/40 shadow-sm py-1.5 px-3 rounded-full cursor-pointer">
+                                    <i id="audio-icon" class="fas fa-play"></i> <span id="audio-btn-text">Tocar Trilha Sonora</span>
+                                </button>
+                                <!-- Ondas de áudio animadas -->
+                                <div id="wave-animation" class="flex gap-0.5 items-end h-4 hidden">
+                                    <div class="audio-bar w-1 bg-rose-500 rounded-full"></div>
+                                    <div class="audio-bar w-1 bg-rose-500 rounded-full"></div>
+                                    <div class="audio-bar w-1 bg-rose-500 rounded-full"></div>
+                                    <div class="audio-bar w-1 bg-rose-500 rounded-full"></div>
+                                </div>
+                            </div>
+
+                            <!-- Banner Decorativo -->
+                            <div class="w-full h-36 rounded-2xl overflow-hidden mb-5 relative shadow-md">
+                                <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent"></div>
+                                <span class="absolute bottom-3 left-1/2 -translate-x-1/2 text-white text-[10px] font-sans font-extrabold tracking-widest uppercase bg-rose-600/90 py-1 px-3.5 rounded-full">24 de Outubro de 2026</span>
+                            </div>
+                            
+                            <span class="text-rose-500/80 text-[10px] uppercase tracking-widest block font-sans font-bold mb-1">Unidos no Amor</span>
+                            <h2 class="text-3xl font-bold text-slate-800 leading-tight">Manoela & Augusto</h2>
+                            <p class="text-xs text-slate-500 italic mb-4 font-serif">"Onde quer que fores, irei eu; e onde quer que pousares, pousarei eu."</p>
+                            
+                            <!-- Cronômetro de Contagem Regressiva Real -->
+                            <div class="grid grid-cols-4 gap-1.5 bg-rose-50/50 p-3 rounded-2xl border border-rose-200/30 mb-5 font-sans">
+                                <div class="text-center"><span id="cronometro-dias" class="block text-sm font-extrabold text-rose-500">00</span><span class="text-[7px] text-rose-400 uppercase font-black tracking-wider">dias</span></div>
+                                <div class="text-center"><span id="cronometro-horas" class="block text-sm font-extrabold text-rose-500">00</span><span class="text-[7px] text-rose-400 uppercase font-black tracking-wider">horas</span></div>
+                                <div class="text-center"><span id="cronometro-minutos" class="block text-sm font-extrabold text-rose-500">00</span><span class="text-[7px] text-rose-400 uppercase font-black tracking-wider">min</span></div>
+                                <div class="text-center"><span id="cronometro-segundos" class="block text-sm font-extrabold text-rose-500">00</span><span class="text-[7px] text-rose-400 uppercase font-black tracking-wider">seg</span></div>
+                            </div>
+
+                            <!-- Detalhes do Dia e do Local -->
+                            <div class="text-left text-xs text-slate-700 space-y-2.5 mb-6 font-sans border-y border-slate-100 py-4 px-1">
+                                <div class="flex items-center gap-2"><i class="fas fa-calendar-days text-rose-400"></i> <span><strong>Data Oficial:</strong> Sábado, 24 de Outubro</span></div>
+                                <div class="flex items-center gap-2"><i class="fas fa-clock text-rose-400"></i> <span><strong>Horário:</strong> Início às 17:30h (Recomendamos pontualidade)</span></div>
+                                <div class="flex items-center gap-2"><i class="fas fa-map-pin text-rose-400"></i> <span><strong>Espaço:</strong> Espaço das Águas Eventos, Lago Sul</span></div>
+                            </div>
+
+                            <!-- Manual de Dress Code (Destaque para ajudar na compra) -->
+                            <div class="bg-rose-50/40 p-4 rounded-2xl mb-6 font-sans text-left border border-rose-200/20">
+                                <h4 class="text-[10px] font-black text-rose-600 uppercase tracking-widest mb-2"><i class="fas fa-vest"></i> Vestuário Sugerido (Dress Code)</h4>
+                                <p class="text-[10px] text-slate-500 leading-relaxed mb-3"><strong>Traje Passeio Completo/Social:</strong> Convidamos todos a irem de tons suaves. Evite tons de branco e off-white para priorizarmos a noiva.</p>
+                                <div class="flex gap-1.5">
+                                    <span class="w-4 h-4 rounded-full bg-pink-100 border border-slate-200" title="Rose"></span>
+                                    <span class="w-4 h-4 rounded-full bg-rose-200 border border-slate-200" title="Champagne"></span>
+                                    <span class="w-4 h-4 rounded-full bg-amber-100 border border-slate-200" title="Nude"></span>
+                                    <span class="w-4 h-4 rounded-full bg-blue-100 border border-slate-200" title="Serenity"></span>
+                                </div>
+                            </div>
+
+                            <!-- Form RSVP Fictício -->
+                            <div class="bg-slate-50 p-4 rounded-2xl mb-6 font-sans border border-slate-200/50 text-left">
+                                <h4 class="text-[10px] font-extrabold text-slate-800 uppercase tracking-wider mb-2">Simular RSVP</h4>
+                                <form onsubmit="enviarRsvpSimulado(event)" class="space-y-2">
+                                    <input type="text" id="rsvp-nome" placeholder="Seu Nome Completo" required class="w-full bg-white border border-slate-200 text-xs p-2.5 rounded-xl outline-none focus:border-rose-400 text-slate-800 font-medium">
+                                    <div class="flex gap-2">
+                                        <select id="rsvp-quantidade" class="bg-white border border-slate-200 text-xs p-2.5 rounded-xl outline-none w-1/2 font-semibold text-slate-700">
+                                            <option value="1">1 Pessoa</option>
+                                            <option value="2">2 Pessoas</option>
+                                            <option value="3">3 Pessoas</option>
+                                        </select>
+                                        <button type="submit" class="w-1/2 bg-rose-500 hover:bg-rose-600 text-white font-bold text-xs rounded-xl transition py-2.5 cursor-pointer shadow-sm">Confirmar</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Botões Finais do Convite -->
+                        <div class="space-y-2.5 font-sans mt-auto px-1">
+                            <a href="https://maps.google.com" target="_blank" 
+                               class="flex items-center justify-center gap-2 w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3 px-4 rounded-xl text-xs shadow-md transition">
+                                <i class="fas fa-route text-rose-400"></i> Como Chegar ao Local
+                            </a>
+                            <button onclick="abrirGavetaPix()" 
+                               class="flex items-center justify-center gap-2 w-full bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold py-3 px-4 rounded-xl text-xs shadow-md transition cursor-pointer">
+                                <i class="fas fa-gift"></i> Lista de Presentes / PIX
+                            </button>
+                        </div>
+
+                        <!-- Gaveta para presentes em PIX -->
+                        <div id="gaveta-pix" class="absolute inset-x-0 bottom-0 bg-white border-t border-slate-200 shadow-[0_-10px_25px_-5px_rgba(0,0,0,0.15)] rounded-t-3xl p-5 transform translate-y-full transition-transform duration-300 font-sans z-50 text-left">
+                            <div class="flex justify-between items-center mb-3">
+                                <h3 class="font-bold text-sm text-slate-900">Lista Virtual e Presente</h3>
+                                <button onclick="fecharGavetaPix()" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times-circle"></i></button>
+                            </div>
+                            <p class="text-[10px] text-slate-500 mb-4 leading-relaxed">Fizemos uma lista convertida em cotas. Você pode fazer um presente de forma prática transferindo no PIX copiado abaixo.</p>
+                            <div class="bg-slate-50 border border-slate-100 p-2.5 rounded-lg flex items-center justify-between text-xs mb-4">
+                                <span class="text-[10px] font-mono select-all text-slate-700 font-bold">pix@t4bconvites.com.br</span>
+                                <button onclick="copiarPixSimulado()" class="text-indigo-600 hover:text-indigo-800 font-bold text-xs flex items-center gap-1 cursor-pointer">
+                                    <i class="fas fa-copy"></i> Copiar
+                                </button>
+                            </div>
+                            <button onclick="fecharGavetaPix()" class="w-full bg-slate-900 text-white py-2 text-xs font-bold rounded-lg hover:bg-slate-800 transition">Concluído</button>
+                        </div>
+                    </div>
+                `;
+            } else if (tipo === 'infantil') {
+                htmlInner = `
+                    <div class="font-kids text-center min-h-full flex flex-col justify-between pb-4">
+                        <div>
+                            <!-- Imagem decorativa safari -->
+                            <div class="w-full h-36 rounded-2xl overflow-hidden mb-5 shadow-sm relative">
+                                <img src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover">
+                                <span class="absolute top-3 left-3 bg-emerald-500 text-white text-[9px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Léo faz 4!</span>
+                            </div>
+
+                            <h2 class="text-3xl font-extrabold text-emerald-800 leading-tight">Safari do Léo 🦁</h2>
+                            <p class="text-xs text-slate-500 mb-4 leading-relaxed">A grande aventura na selva já vai começar! Prepare seu jipe e venha se divertir de montão comigo!</p>
+
+                            <!-- Quando e Onde -->
+                            <div class="bg-amber-50/70 border border-amber-200/40 rounded-2xl p-4 text-left text-xs text-slate-700 space-y-2.5 mb-5">
+                                <p class="font-bold text-emerald-800 text-center uppercase tracking-wider mb-1 text-[10px]">Guia da Expedição</p>
+                                <div class="flex items-center gap-2"><i class="fas fa-calendar text-amber-500"></i> <span><strong>Quando:</strong> Domingo, 12 de Julho</span></div>
+                                <div class="flex items-center gap-2"><i class="fas fa-clock text-amber-500"></i> <span><strong>Horário:</strong> Início às 16:00h</span></div>
+                                <div class="flex items-center gap-2"><i class="fas fa-map-location text-amber-500"></i> <span><strong>Local:</strong> Selva Buffet Kids Park, Setor Sudoeste</span></div>
+                            </div>
+
+                            <!-- Cronograma Dinâmico do Evento -->
+                            <div class="bg-emerald-50/50 rounded-2xl p-4 text-left text-[11px] text-slate-600 space-y-2 mb-5">
+                                <p class="font-bold text-emerald-800 uppercase tracking-widest text-[9px] mb-1">🦁 Programação Selvagem</p>
+                                <p><strong>16:00</strong> - Abertura dos Portões & Brinquedoteca</p>
+                                <p><strong>17:30</strong> - Caça ao Tesouro com os Recreadores</p>
+                                <p><strong>19:00</strong> - Parabéns e Corte do Bolo</p>
+                            </div>
+
+                            <!-- Sugestões de Presente (Para os Pais) -->
+                            <div class="bg-amber-100/30 p-3.5 rounded-2xl text-left text-xs mb-6 border border-amber-300/20">
+                                <p class="font-bold text-emerald-900 text-[10px] uppercase mb-1">🎁 Sugestão de Presentes</p>
+                                <p class="text-[10px] text-slate-500"><strong>Calçado:</strong> Nº 24 | <strong>Roupa:</strong> Tamanho 4 | <strong>Gosto de:</strong> Dinossauros e Carrinhos!</p>
+                            </div>
+                        </div>
+
+                        <!-- Botões de Ação -->
+                        <div class="space-y-2.5 mt-auto">
+                            <a href="https://wa.me/5561984672596?text=Presença%20confirmada%20na%20festinha%20do%20Léo!" target="_blank" 
+                               class="flex items-center justify-center gap-2 w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3.5 px-4 rounded-xl text-xs shadow-md transition">
+                                <i class="fab fa-whatsapp text-sm"></i> Confirmar Presença da Família
+                            </a>
+                            <a href="https://waze.com" target="_blank" 
+                               class="flex items-center justify-center gap-2 w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-3.5 px-4 rounded-xl text-xs shadow-md transition">
+                                <i class="fab fa-waze text-sm"></i> Traçar Rota via Waze
+                            </a>
+                        </div>
+                    </div>
+                `;
+            } else if (tipo === 'corporativo') {
+                htmlInner = `
+                    <div class="font-sans text-center min-h-full flex flex-col justify-between pb-4">
+                        <div>
+                            <!-- Imagem decorativa corporativo -->
+                            <div class="w-full h-36 rounded-2xl overflow-hidden mb-5 shadow-sm">
+                                <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&q=80&w=600" class="w-full h-full object-cover">
+                            </div>
+
+                            <div class="border-l-4 border-amber-500 pl-3 text-left mb-4">
+                                <span class="text-[9px] text-slate-400 uppercase tracking-widest font-mono block">Solenidade Oficial</span>
+                                <h2 class="text-base font-extrabold text-slate-900 leading-tight">Colação de Grau - Direito 2026</h2>
+                            </div>
+                            <p class="text-xs text-slate-500 text-left leading-relaxed mb-5">Convidamos você e sua ilustre família para participarem conosco da celebração solene de nossa formatura e início da advocacia.</p>
+
+                            <!-- Menu por Abas -->
+                            <div class="flex gap-1.5 mb-4 bg-slate-950 p-1.5 rounded-xl text-[10px]">
+                                <button id="btn-aba-cronograma" onclick="trocarAbaCorporativa('cronograma')" class="w-1/3 bg-amber-500 text-slate-950 font-bold py-2 rounded-lg transition">Cronograma</button>
+                                <button id="btn-aba-chegar" onclick="trocarAbaCorporativa('chegar')" class="w-1/3 bg-slate-800 text-slate-300 font-bold py-2 rounded-lg transition hover:text-white">Acesso</button>
+                                <button id="btn-aba-traje" onclick="trocarAbaCorporativa('traje')" class="w-1/3 bg-slate-800 text-slate-300 font-bold py-2 rounded-lg transition hover:text-white">Trajes</button>
+                            </div>
+
+                            <!-- Aba 1: Cronograma -->
+                            <div id="conteudo-aba-cronograma" class="bg-slate-50 rounded-2xl p-4 border border-slate-200/50 text-left text-xs text-slate-600 space-y-2 mb-6 transition-all">
+                                <div class="flex justify-between border-b border-slate-200/40 pb-1.5"><span><strong>19:00</strong> - Abertura dos Portões</span></div>
+                                <div class="flex justify-between border-b border-slate-200/40 pb-1.5"><span><strong>20:00</strong> - Solenidade & Juramento</span></div>
+                                <div class="flex justify-between pb-1"><span><strong>21:30</strong> - Coquetel Premium & Baile</span></div>
+                            </div>
+
+                            <!-- Aba 2: Como Chegar (Oculta) -->
+                            <div id="conteudo-aba-chegar" class="bg-slate-50 rounded-2xl p-4 border border-slate-200/50 text-left text-xs text-slate-600 space-y-2 mb-6 hidden transition-all">
+                                <p class="text-[10px] text-slate-500 mb-1 leading-relaxed"><i class="fas fa-info-circle text-amber-500"></i> Informações de Acesso:</p>
+                                <p>🚗 Estacionamento privativo com segurança no local.</p>
+                                <p>🎟️ <strong>Acesso:</strong> Apresentar o QR Code gerado neste convite no totem de entrada.</p>
+                            </div>
+
+                            <!-- Aba 3: Traje (Oculta) -->
+                            <div id="conteudo-aba-traje" class="bg-slate-50 rounded-2xl p-4 border border-slate-200/50 text-left text-xs text-slate-600 space-y-2 mb-6 hidden transition-all">
+                                <p class="font-bold text-slate-800">Dress Code Requerido:</p>
+                                <p>🤵 <strong>Homens:</strong> Traje Social Completo / Terno Escuro.</p>
+                                <p>👗 <strong>Mulheres:</strong> Vestido Longo ou Midi de Gala.</p>
+                            </div>
+                        </div>
+
+                        <!-- Botão de Ação -->
+                        <div class="space-y-2.5 mt-auto">
+                            <a href="https://wa.me/5561984672596?text=Desejo%20confirmar%20minha%20presença%20na%20colação%20de%20grau!" target="_blank" 
+                               class="flex items-center justify-center gap-2 w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3.5 px-4 rounded-xl text-xs shadow-md transition">
+                                <i class="fas fa-id-card text-amber-500"></i> Confirmar Presença VIP
+                            </a>
+                        </div>
+                    </div>
+                `;
+            }
+
+            tela.innerHTML = htmlInner;
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            document.body.classList.add('overflow-hidden');
+
+            if (tipo === 'casamento') {
+                iniciarCronometro();
             }
         }
 
-        function goToGifts() {
-            const input = document.getElementById('guestName');
-            const error = document.getElementById('errorMsg');
-            
-            if(!input.value.trim() || !fotoCapturadaDataUrl) {
-                input.classList.add('border-red-500');
-                error.classList.remove('hidden');
-                return;
-            }
-            error.classList.add('hidden');
-            document.getElementById('step-1').classList.add('hidden');
-            document.getElementById('step-2').classList.remove('hidden');
+        function fecharSimulador() {
+            const modal = document.getElementById('modalSimulador');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            document.body.classList.remove('overflow-hidden');
+            if (timerInterval) clearInterval(timerInterval);
         }
 
-        function finalizarConfirmacao() {
-            const nome = document.getElementById('guestName').value;
-            const genero = document.querySelector('input[name="gender"]:checked').value;
-            const posicao = document.getElementById('playerPosition').value;
-            
-            const selecionados = [];
-            document.querySelectorAll('#giftList input:checked').forEach(i => selecionados.push(i.value));
-            
-            const errorTxt = document.getElementById('giftError');
-
-            if(selecionados.length === 0) {
-                errorTxt.classList.remove('hidden');
-                return;
-            }
-
-            errorTxt.classList.add('hidden');
-            
-            // Renderiza dados e sorteia pontuação OVR única (ex: 96, 97, 98 ou 99)
-            const ovrAleatorio = Math.floor(Math.random() * 4) + 96;
-            document.getElementById('cardOvr').innerText = `${ovrAleatorio} OVR`;
-
-            document.getElementById('cardPhoto').src = fotoCapturadaDataUrl;
-            document.getElementById('cardName').innerText = nome;
-            document.getElementById('cardPosition').innerText = posicao;
-            document.getElementById('badgeGender').innerText = genero;
-            
-            // Aciona o gerador de frases únicas!
-            document.getElementById('cardSkill').innerText = gerarHabilidadeUnica(posicao);
-
-            const mimosTxt = selecionados.join(", ");
-            const textoWhats = `*GABI CUP 2026 | SELEÇÃO VIP* 🏆\n\n💎 *CRAQUE:* ${nome}\n🎭 *GÊNERO:* ${genero}\n📍 *POSIÇÃO EM CAMPO:* ${posicao}\n🎁 *ESCALAÇÃO PRESENTE:* ${mimosTxt}`;
-            
-            window.open(`https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(textoWhats)}`, '_blank');
-            
-            document.getElementById('successModal').classList.remove('hidden');
-            confetti({ particleCount: 200, spread: 90, origin: { y: 0.6 }, colors: ['#ffcc00', '#ffffff', '#0033aa'] });
-        }
-
-        function closeModal() {
-            document.getElementById('successModal').classList.add('hidden');
-            showPage('home');
+        function toggleFaq(header) {
+            const p = header.nextElementSibling;
+            const icon = header.querySelector('i');
+            p.classList.toggle('hidden');
+            icon.classList.toggle('rotate-180');
         }
     </script>
 </body>
