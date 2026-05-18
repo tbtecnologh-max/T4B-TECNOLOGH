@@ -209,9 +209,13 @@
         // Inicializar Firebase
         function inicializarFirebase() {
             try {
-                firebase.initializeApp(firebaseConfig);
+                if (!firebase.apps.length) {
+                    firebase.initializeApp(firebaseConfig);
+                    console.log("✓ Firebase iniciado");
+                } else {
+                    console.log("✓ Firebase já iniciado");
+                }
                 db = firebase.database();
-                console.log("✓ Firebase iniciado");
             } catch (e) {
                 console.error("❌ Erro ao iniciar Firebase:", e.message);
                 mostrarErro("Firebase não configurado. Veja o console para detalhes.");
@@ -260,7 +264,11 @@
 
         // CARREGAR DADOS DO FIREBASE
         function carregarDados() {
-            if (!db) return;
+            if (!db) {
+                console.warn('⚠️ Firebase não inicializado antes de carregar dados');
+                return;
+            }
+            console.log('🔄 Carregando acessos do Firebase...');
 
             db.ref('acessos').once('value', (snapshot) => {
                 const dados = snapshot.val() || {};
@@ -322,6 +330,10 @@
                 `).join('') : '<p class="text-slate-500 text-sm">Sem cliques ainda</p>';
 
                 document.getElementById('topCliques').innerHTML = topCliquesHTML;
+            }, (error) => {
+                console.error('❌ Erro ao ler acessos:', error);
+                document.getElementById('listaAcessos').innerHTML = '<div class="text-center py-8 text-slate-400"><p>Erro ao carregar acessos</p></div>';
+                document.getElementById('tabelaAcessos').innerHTML = '<div class="text-center py-8 text-slate-400"><p>Erro ao carregar tabela</p></div>';
             });
         }
 

@@ -130,14 +130,17 @@
         const response = await fetch('https://api.ipify.org?format=json');
         const data = await response.json();
         userIP = data.ip;
+        console.log('✅ IP obtido:', userIP);
       } catch (e) {
         userIP = 'Desconhecido';
+        console.log('⚠️ Não foi possível obter IP:', e.message);
       }
       inicializarRastreamento();
     }
     
     // Inicializar Firebase
     function inicializarRastreamento() {
+      console.log('🔌 Iniciando rastreamento Firebase...');
       try {
         // TODO: Substitua pelos valores do seu Firebase
                 const firebaseConfig = {
@@ -176,7 +179,9 @@
         referrer: document.referrer || 'direto'
       };
       
-      db.ref('acessos').push(novoAcesso).catch(e => {
+      db.ref('acessos').push(novoAcesso).then(() => {
+        console.log('✅ Acesso registrado:', novoAcesso);
+      }).catch(e => {
         console.log('⚠️ Erro ao registrar acesso:', e.message);
       });
     }
@@ -199,6 +204,7 @@
     
     // Obter IP ao carregar página
     window.addEventListener('load', function() {
+      console.log('📲 Página carregada - iniciando rastreamento');
       obterIP();
       rastrearCliquesWhatsApp();
     });
