@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T4B - Painel Administrativo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+    <style>
+        body { font-family: 'Montserrat', sans-serif; }
+        .login-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; }
+        .dashboard-container { min-height: 100vh; background: #f3f4f6; }
+        .stat-card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        .access-row { border-bottom: 1px solid #e5e7eb; padding: 15px 0; transition: background 0.2s; }
+        .access-row:hover { background: #f9fafb; }
+        .status-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+        .status-live { background: #dcfce7; color: #166534; }
+        .status-active { background: #dbeafe; color: #1e40af; }
+        .chart { min-height: 300px; }
+    </style>
+</head>
+<body>
+    <!-- LOGIN SECTION -->
+    <div id="loginSection" class="login-container bg-gradient-to-br from-slate-950 to-indigo-950 text-white">
+        <div class="w-full max-w-md px-4">
+            <div class="text-center mb-8">
+                <h1 class="text-4xl font-black mb-2">T4B</h1>
+                <p class="text-slate-400">Painel de Controle Administrativo</p>
+            </div>
+            
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-8 border border-white/20">
+                <form onsubmit="fazerLogin(event)">
+                    <div class="mb-6">
+                        <label class="block text-sm font-bold mb-2">Senha Administrativa</label>
+                        <input 
+                            type="password" 
+                            id="senhaInput" 
+                            placeholder="Digite a senha" 
+                            class="w-full bg-white/20 border border-white/30 rounded-lg px-4 py-3 text-white placeholder-slate-300 focus:outline-none focus:border-indigo-400"
+                            required
+                        >
+                        <p id="erroSenha" class="text-red-400 text-sm mt-2 hidden"></p>
+                    </div>
+                    
+                    <button 
+                        type="submit" 
+                        class="w-full bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white font-bold py-3 rounded-lg transition"
+                    >
+                        Acessar Painel
+                    </button>
+                </form>
+                
+                <div class="mt-6 pt-6 border-t border-white/20 text-center text-sm text-slate-400">
+                    <p>💡 Senha padrão: <strong>T4B2026</strong></p>
+                    <p class="mt-2">Altere a senha no arquivo admin.html</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DASHBOARD SECTION -->
+    <div id="dashboardSection" class="dashboard-container hidden">
+        <!-- HEADER -->
+        <header class="bg-white shadow-sm sticky top-0 z-40">
+            <div class="max-w-7xl mx-auto px-4 md:px-8 py-4 flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-black text-slate-900">Painel de Rastreamento</h1>
+                    <p class="text-sm text-slate-600">Acompanhamento em tempo real</p>
+                </div>
+                <div class="flex items-center gap-4">
+                    <div class="text-right">
+                        <p class="text-sm font-bold text-slate-900">Acessos Hoje</p>
+                        <p class="text-2xl font-black text-indigo-600" id="totalAcessos">0</p>
+                    </div>
+                    <button onclick="fazerLogout()" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-lg transition">
+                        <i class="fas fa-sign-out-alt mr-2"></i> Sair
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <div class="max-w-7xl mx-auto px-4 md:px-8 py-8">
+            <!-- STATS ROW -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="stat-card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-slate-600 mb-1">Acessos Totais</p>
+                            <p class="text-3xl font-black text-slate-900" id="statAcessos">0</p>
+                        </div>
+                        <i class="fas fa-globe text-4xl text-indigo-500 opacity-20"></i>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-slate-600 mb-1">Usuários Únicos</p>
+                            <p class="text-3xl font-black text-slate-900" id="statUsuarios">0</p>
+                        </div>
+                        <i class="fas fa-users text-4xl text-emerald-500 opacity-20"></i>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-slate-600 mb-1">Cliques em CTA</p>
+                            <p class="text-3xl font-black text-slate-900" id="statCliques">0</p>
+                        </div>
+                        <i class="fas fa-mouse text-4xl text-amber-500 opacity-20"></i>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-slate-600 mb-1">Taxa de Conversão</p>
+                            <p class="text-3xl font-black text-slate-900" id="statConversao">0%</p>
+                        </div>
+                        <i class="fas fa-chart-pie text-4xl text-rose-500 opacity-20"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TWO COLUMN LAYOUT -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- ACESSOS EM TEMPO REAL -->
+                <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm p-6">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-bold text-slate-900">Acessos em Tempo Real</h2>
+                        <span class="inline-flex items-center gap-2 bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-xs font-bold">
+                            <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span> LIVE
+                        </span>
+                    </div>
+                    
+                    <div id="listaAcessos" class="space-y-0">
+                        <div class="text-center py-8 text-slate-400">
+                            <p>Aguardando acessos...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RESUMO LATERAL -->
+                <div class="space-y-6">
+                    <!-- CLIQUES MAIS COMUNS -->
+                    <div class="bg-white rounded-2xl shadow-sm p-6">
+                        <h3 class="text-lg font-bold text-slate-900 mb-4">Cliques Mais Comuns</h3>
+                        <div id="topCliques" class="space-y-3">
+                            <div class="text-center py-4 text-slate-400 text-sm">
+                                Carregando...
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- PÁGINAS MAIS VISITADAS -->
+                    <div class="bg-white rounded-2xl shadow-sm p-6">
+                        <h3 class="text-lg font-bold text-slate-900 mb-4">Ações Rastreadas</h3>
+                        <div id="acoesRastreadas" class="space-y-2 text-sm">
+                            <p class="text-slate-600">
+                                <i class="fas fa-check text-emerald-500 mr-2"></i> Cliques em WhatsApp
+                            </p>
+                            <p class="text-slate-600">
+                                <i class="fas fa-check text-emerald-500 mr-2"></i> Aberturas de Simulador
+                            </p>
+                            <p class="text-slate-600">
+                                <i class="fas fa-check text-emerald-500 mr-2"></i> Confirmações RSVP
+                            </p>
+                            <p class="text-slate-600">
+                                <i class="fas fa-check text-emerald-500 mr-2"></i> Acesso a Gaveta PIX
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TABELA DETALHADA -->
+            <div class="mt-8 bg-white rounded-2xl shadow-sm p-6">
+                <h2 class="text-xl font-bold text-slate-900 mb-6">Histórico Detalhado</h2>
+                <div id="tabelaAcessos" class="space-y-0 divide-y">
+                    <div class="text-center py-8 text-slate-400">
+                        <p>Nenhum acesso registrado ainda</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== CONFIGURAÇÃO FIREBASE =====
+        // TODO: Substitua pelos valores do seu Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBWAQcGpCwGf8Mqsi5vK0r_AEjaPJsQsrs",
+            authDomain: "t4b-convites.firebaseapp.com",
+            databaseURL: "https://t4b-convites-default-rtdb.firebaseio.com",
+            projectId: "t4b-convites",
+            storageBucket: "t4b-convites.firebasestorage.app",
+            messagingSenderId: "222281787997",
+            appId: "1:222281787997:web:35e6e25e7ad17b95acbbb4"
+        };
+
+        let db = null;
+        let isAuthenticated = false;
+        const ADMIN_PASSWORD = "T4B2026"; // Altere isso!
+
+        // Inicializar Firebase
+        function inicializarFirebase() {
+            try {
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.database();
+                console.log("✓ Firebase iniciado");
+            } catch (e) {
+                console.error("❌ Erro ao iniciar Firebase:", e.message);
+                mostrarErro("Firebase não configurado. Veja o console para detalhes.");
+            }
+        }
+
+        // LOGIN
+        function fazerLogin(event) {
+            event.preventDefault();
+            const senha = document.getElementById('senhaInput').value;
+            const erroEl = document.getElementById('erroSenha');
+
+            if (senha === ADMIN_PASSWORD) {
+                isAuthenticated = true;
+                localStorage.setItem('t4b_admin_auth', 'true');
+                localStorage.setItem('t4b_auth_time', new Date().getTime());
+                exibirDashboard();
+                erroEl.classList.add('hidden');
+            } else {
+                erroEl.textContent = '❌ Senha incorreta!';
+                erroEl.classList.remove('hidden');
+            }
+        }
+
+        // LOGOUT
+        function fazerLogout() {
+            if (confirm('Tem certeza que deseja sair?')) {
+                isAuthenticated = false;
+                localStorage.removeItem('t4b_admin_auth');
+                localStorage.removeItem('t4b_auth_time');
+                document.getElementById('dashboardSection').classList.add('hidden');
+                document.getElementById('loginSection').classList.remove('hidden');
+                document.getElementById('senhaInput').value = '';
+            }
+        }
+
+        // EXIBIR DASHBOARD
+        function exibirDashboard() {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('dashboardSection').classList.remove('hidden');
+            carregarDados();
+            
+            // Atualizar a cada 2 segundos
+            setInterval(carregarDados, 2000);
+        }
+
+        // CARREGAR DADOS DO FIREBASE
+        function carregarDados() {
+            if (!db) return;
+
+            db.ref('acessos').once('value', (snapshot) => {
+                const dados = snapshot.val() || {};
+                const acessosArray = Object.values(dados).sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                
+                // Atualizar stats
+                const usuariosUnicos = new Set(acessosArray.map(a => a.ip)).size;
+                const cliques = acessosArray.filter(a => a.tipo === 'clique').length;
+                const taxa = acessosArray.length > 0 ? Math.round((cliques / acessosArray.length) * 100) : 0;
+
+                document.getElementById('statAcessos').textContent = acessosArray.length;
+                document.getElementById('statUsuarios').textContent = usuariosUnicos;
+                document.getElementById('statCliques').textContent = cliques;
+                document.getElementById('statConversao').textContent = taxa + '%';
+                document.getElementById('totalAcessos').textContent = acessosArray.length;
+
+                // Atualizar lista em tempo real (últimos 15)
+                const ultimos15 = acessosArray.slice(0, 15);
+                const listaHTML = ultimos15.length > 0 ? ultimos15.map(acesso => `
+                    <div class="access-row flex justify-between items-center">
+                        <div class="flex-1">
+                            <p class="font-semibold text-slate-900">${acesso.tipo === 'clique' ? '🖱️ ' : '👁️ '}${acesso.acao || acesso.tipo}</p>
+                            <p class="text-xs text-slate-500">IP: ${acesso.ip || 'N/A'}</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="status-badge status-active">${new Date(acesso.timestamp).toLocaleTimeString('pt-BR')}</span>
+                        </div>
+                    </div>
+                `).join('') : '<div class="text-center py-8 text-slate-400"><p>Aguardando acessos...</p></div>';
+
+                document.getElementById('listaAcessos').innerHTML = listaHTML;
+
+                // Atualizar tabela detalhada
+                const tabelaHTML = acessosArray.slice(0, 50).map((acesso, idx) => `
+                    <div class="access-row">
+                        <div class="grid grid-cols-5 gap-4 items-center text-sm">
+                            <span class="font-semibold text-slate-900">${idx + 1}</span>
+                            <span class="text-slate-600">${acesso.ip || 'N/A'}</span>
+                            <span class="text-slate-600">${acesso.acao || acesso.tipo}</span>
+                            <span class="text-slate-600">${acesso.pagina || 'index.html'}</span>
+                            <span class="text-slate-500 text-right">${new Date(acesso.timestamp).toLocaleString('pt-BR')}</span>
+                        </div>
+                    </div>
+                `).join('');
+
+                document.getElementById('tabelaAcessos').innerHTML = tabelaHTML || '<div class="text-center py-8 text-slate-400">Nenhum acesso registrado</div>';
+
+                // Cliques mais comuns
+                const contagemCliques = {};
+                acessosArray.filter(a => a.tipo === 'clique').forEach(a => {
+                    contagemCliques[a.acao] = (contagemCliques[a.acao] || 0) + 1;
+                });
+                const topCliques = Object.entries(contagemCliques).sort((a, b) => b[1] - a[1]).slice(0, 5);
+                const topCliquesHTML = topCliques.length > 0 ? topCliques.map(([acao, count]) => `
+                    <div class="flex justify-between items-center">
+                        <span class="text-slate-700">${acao}</span>
+                        <span class="font-bold text-indigo-600">${count}x</span>
+                    </div>
+                `).join('') : '<p class="text-slate-500 text-sm">Sem cliques ainda</p>';
+
+                document.getElementById('topCliques').innerHTML = topCliquesHTML;
+            });
+        }
+
+        // VERIFICAR SE JÁ ESTÁ AUTENTICADO
+        function verificarAutenticacao() {
+            const auth = localStorage.getItem('t4b_admin_auth');
+            const authTime = localStorage.getItem('t4b_auth_time');
+            
+            // Sessão válida por 24 horas
+            if (auth && authTime) {
+                const horasPassadas = (new Date().getTime() - parseInt(authTime)) / (1000 * 60 * 60);
+                if (horasPassadas < 24) {
+                    isAuthenticated = true;
+                    inicializarFirebase();
+                    exibirDashboard();
+                    return;
+                }
+            }
+            
+            // Caso contrário, mostra login
+            document.getElementById('loginSection').classList.remove('hidden');
+            document.getElementById('dashboardSection').classList.add('hidden');
+        }
+
+        function mostrarErro(msg) {
+            alert('❌ Erro: ' + msg);
+        }
+
+        // Iniciar ao carregar
+        window.addEventListener('load', verificarAutenticacao);
+        inicializarFirebase();
+    </script>
+</body>
+</html>

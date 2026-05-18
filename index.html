@@ -115,6 +115,95 @@
     </script>
     <!-- TikTok Pixel Code End -->
     
+    <!-- Firebase Realtime Database para Rastreamento -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
+    
+    <script>
+    // ===== RASTREAMENTO EM TEMPO REAL =====
+    let db = null;
+    let userIP = 'N/A';
+    
+    // Obter IP do usuário
+    async function obterIP() {
+      try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        const data = await response.json();
+        userIP = data.ip;
+      } catch (e) {
+        userIP = 'Desconhecido';
+      }
+      inicializarRastreamento();
+    }
+    
+    // Inicializar Firebase
+    function inicializarRastreamento() {
+      try {
+        // TODO: Substitua pelos valores do seu Firebase
+                const firebaseConfig = {
+                    apiKey: "AIzaSyBWAQcGpCwGf8Mqsi5vK0r_AEjaPJsQsrs",
+                    authDomain: "t4b-convites.firebaseapp.com",
+                    databaseURL: "https://t4b-convites-default-rtdb.firebaseio.com",
+                    projectId: "t4b-convites",
+                    storageBucket: "t4b-convites.firebasestorage.app",
+                    messagingSenderId: "222281787997",
+                    appId: "1:222281787997:web:35e6e25e7ad17b95acbbb4"
+                };
+        
+        if (!firebase.apps.length) {
+          firebase.initializeApp(firebaseConfig);
+        }
+        db = firebase.database();
+        
+        // Registrar acesso da página
+        registrarAcesso('acesso', 'Visitou a página principal');
+      } catch (e) {
+        console.log('⚠️ Firebase não configurado - rastreamento desativado');
+      }
+    }
+    
+    // Função para registrar acessos e cliques
+    function registrarAcesso(tipo, acao) {
+      if (!db) return;
+      
+      const novoAcesso = {
+        tipo: tipo,
+        acao: acao,
+        ip: userIP,
+        pagina: window.location.pathname || 'index.html',
+        timestamp: new Date().getTime(),
+        userAgent: navigator.userAgent,
+        referrer: document.referrer || 'direto'
+      };
+      
+      db.ref('acessos').push(novoAcesso).catch(e => {
+        console.log('⚠️ Erro ao registrar acesso:', e.message);
+      });
+    }
+    
+    // Rastrear cliques em links WhatsApp
+    function rastrearCliquesWhatsApp() {
+      document.querySelectorAll('a[href*="wa.me"]').forEach(link => {
+        link.addEventListener('click', function() {
+          const texto = this.textContent.trim() || this.getAttribute('title') || 'Botão WhatsApp';
+          registrarAcesso('clique', texto);
+        });
+      });
+    }
+    
+    // Rastrear cliques em "Testar Interatividade"
+    window.abrirSimuladorComRastreamento = function(tipo) {
+      registrarAcesso('clique', `Abrir Simulador - ${tipo}`);
+      abrirSimulador(tipo);
+    };
+    
+    // Obter IP ao carregar página
+    window.addEventListener('load', function() {
+      obterIP();
+      rastrearCliquesWhatsApp();
+    });
+    </script>
+    
     <style>
         /* Efeito de Vidro Desfocado (Glassmorphism) */
         .glass {
@@ -310,7 +399,7 @@
                         </div>
                     </div>
                     <div class="p-8 pt-0">
-                        <button onclick="abrirSimulador('casamento')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-6 rounded-2xl transition duration-300 text-center flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-indigo-600/10">
+                        <button onclick="abrirSimuladorComRastreamento('casamento')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-6 rounded-2xl transition duration-300 text-center flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-indigo-600/10">
                             <i class="fas fa-mobile-screen-button"></i> Testar Interatividade
                         </button>
                     </div>
@@ -344,7 +433,7 @@
                         </div>
                     </div>
                     <div class="p-8 pt-0">
-                        <button onclick="abrirSimulador('infantil')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-6 rounded-2xl transition duration-300 text-center flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-indigo-600/10">
+                        <button onclick="abrirSimuladorComRastreamento('infantil')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-6 rounded-2xl transition duration-300 text-center flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-indigo-600/10">
                             <i class="fas fa-mobile-screen-button"></i> Testar Interatividade
                         </button>
                     </div>
@@ -378,7 +467,7 @@
                         </div>
                     </div>
                     <div class="p-8 pt-0">
-                        <button onclick="abrirSimulador('corporativo')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-6 rounded-2xl transition duration-300 text-center flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-indigo-600/10">
+                        <button onclick="abrirSimuladorComRastreamento('corporativo')" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-6 rounded-2xl transition duration-300 text-center flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-indigo-600/10">
                             <i class="fas fa-mobile-screen-button"></i> Testar Interatividade
                         </button>
                     </div>
@@ -645,74 +734,6 @@
                 toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
             }, 3000);
         }
-        
-        // TikTok Events - Rastreamento de Interações
-        window.addEventListener('load', function() {
-          // Track de SearchCatalog quando usuário vê os modelos
-          ttq.track('Search', {
-            "contents": [
-              {
-                "content_id": "modelos-convites",
-                "content_type": "product_group",
-                "content_name": "Visualização de Modelos de Convites"
-              }
-            ],
-            "value": 0,
-            "currency": "BRL",
-            "search_string": "convites-digitais-premium"
-          });
-        });
-        
-        // Track quando usuário clica em "Testar Interatividade"
-        window.trackSimulador = function(tipo) {
-          const tipoMap = {
-            'casamento': 'Convite de Casamento',
-            'infantil': 'Convite Infantil',
-            'corporativo': 'Convite Corporativo'
-          };
-          
-          ttq.track('AddToWishlist', {
-            "contents": [
-              {
-                "content_id": "simulador-" + tipo,
-                "content_type": "product",
-                "content_name": tipoMap[tipo] || tipo
-              }
-            ],
-            "value": 0,
-            "currency": "BRL"
-          });
-        };
-        
-        // Track quando usuário confirma RSVP no simulador
-        window.trackRSVP = function(nome, quantidade) {
-          ttq.track('CompleteRegistration', {
-            "contents": [
-              {
-                "content_id": "rsvp-simulado",
-                "content_type": "product",
-                "content_name": "RSVP Confirmado - " + nome
-              }
-            ],
-            "value": 0,
-            "currency": "BRL"
-          });
-        };
-        
-        // Track quando usuário visualiza gaveta de presentes
-        window.trackGavetaPix = function() {
-          ttq.track('AddPaymentInfo', {
-            "contents": [
-              {
-                "content_id": "pagamento-pix",
-                "content_type": "product",
-                "content_name": "Sistema de Pagamento PIX"
-              }
-            ],
-            "value": 100,
-            "currency": "BRL"
-          });
-        };
 
         // Cópia elegante do PIX sem alert do navegador
         function copiarPixSimulado() {
@@ -765,8 +786,6 @@
             const nome = document.getElementById('rsvp-nome').value;
             const convidados = document.getElementById('rsvp-quantidade').value;
             
-            trackRSVP(nome, convidados);
-            
             showToast(`Obrigado, ${nome}! Confirmação de ${convidados} pessoa(s) simulada com sucesso.`);
             document.getElementById('rsvp-nome').value = '';
         }
@@ -792,7 +811,6 @@
 
         // Drawer da lista de presentes/PIX no celular do casamento
         function abrirGavetaPix() {
-            trackGavetaPix();
             const drawer = document.getElementById('gaveta-pix');
             if (drawer) drawer.classList.replace('translate-y-full', 'translate-y-0');
         }
@@ -804,9 +822,6 @@
 
         // Carregamento inteligente dos modelos reais para simular no celular
         function abrirSimulador(tipo) {
-            // Track interação com simulador
-            trackSimulador(tipo);
-            
             const modal = document.getElementById('modalSimulador');
             const tela = document.getElementById('telaSmartphone');
             let htmlInner = '';
@@ -1056,3 +1071,4 @@
     </script>
 </body>
 </html>
+
