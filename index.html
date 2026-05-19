@@ -118,7 +118,7 @@
     <!-- Firebase Firestore para Rastreamento -->
     <script type="module">
       import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
-      import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+      import { getFirestore, collection, addDoc, getDocs, query, where, limit } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
 
       const firebaseConfig = {
         apiKey: "AIzaSyBWAQcGpCwGf8Mqsi5vK0r_AEjaPJsQsrs",
@@ -131,6 +131,7 @@
 
       let db = null;
       let userIP = 'N/A';
+      const LOCAL_STORAGE_UNIQUE_IP_KEY = 't4b_unique_access_ip';
 
       async function obterIP() {
         try {
@@ -158,10 +159,47 @@
           const apps = getApps();
           const app = apps.length === 0 ? initializeApp(firebaseConfig) : apps[0];
           db = getFirestore(app);
-          registrarAcesso('visualizacao', 'Acesso à Página Inicial');
+          registrarVisualizacaoUnica();
         } catch (e) {
           console.log('⚠️ Firebase não configurado - rastreamento desativado', e);
         }
+      }
+
+      async function queryExisteAcessoUnicoPorIP(ip) {
+        if (!db) return false;
+        try {
+          const acessoQuery = query(
+            collection(db, 'acessos'),
+            where('ip', '==', ip),
+            where('tipo', '==', 'visualizacao'),
+            limit(1)
+          );
+          const snapshot = await getDocs(acessoQuery);
+          return !snapshot.empty;
+        } catch (error) {
+          console.log('⚠️ Erro ao consultar IP existente:', error.message || error);
+          return false;
+        }
+      }
+
+      async function registrarVisualizacaoUnica() {
+        if (!db || !userIP || userIP === 'Desconhecido' || userIP === 'N/A') return;
+        const ipLocal = localStorage.getItem(LOCAL_STORAGE_UNIQUE_IP_KEY);
+
+        if (ipLocal === userIP) {
+          console.log('✅ Acesso já registrado localmente para este IP:', userIP);
+          return;
+        }
+
+        const existeNoFirestore = await queryExisteAcessoUnicoPorIP(userIP);
+        if (existeNoFirestore) {
+          console.log('✅ Acesso já registrado no Firestore para este IP:', userIP);
+          localStorage.setItem(LOCAL_STORAGE_UNIQUE_IP_KEY, userIP);
+          return;
+        }
+
+        await registrarAcesso('visualizacao', 'Acesso à Página Inicial');
+        localStorage.setItem(LOCAL_STORAGE_UNIQUE_IP_KEY, userIP);
       }
 
       async function registrarAcesso(tipo, acao) {

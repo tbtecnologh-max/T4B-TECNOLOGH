@@ -266,15 +266,16 @@
                 acessosArray.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
 
                 // Atualizar Indicadores
-                const usuariosUnicos = new Set(acessosArray.map(a => a.ip)).size;
+                const acessosVisuais = acessosArray.filter(a => a.tipo === 'visualizacao');
+                const usuariosUnicos = new Set(acessosVisuais.map(a => a.ip)).size;
                 const cliques = acessosArray.filter(a => a.tipo === 'clique').length;
-                const taxa = acessosArray.length > 0 ? Math.round((cliques / acessosArray.length) * 100) : 0;
+                const taxa = acessosVisuais.length > 0 ? Math.round((cliques / acessosVisuais.length) * 100) : 0;
 
-                document.getElementById('statAcessos').textContent = acessosArray.length;
+                document.getElementById('statAcessos').textContent = acessosVisuais.length;
                 document.getElementById('statUsuarios').textContent = usuariosUnicos;
                 document.getElementById('statCliques').textContent = cliques;
                 document.getElementById('statConversao').textContent = taxa + '%';
-                document.getElementById('totalAcessos').textContent = acessosArray.length;
+                document.getElementById('totalAcessos').textContent = acessosVisuais.length;
 
                 // Atualizar Lista Rápida (Últimos 15)
                 const ultimos15 = acessosArray.slice(0, 15);
