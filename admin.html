@@ -209,6 +209,7 @@
         // Inicializar Firebase
         function inicializarFirebase() {
             try {
+                console.log('🔌 inicializarFirebase chamado, firebase.apps.length =', firebase.apps.length);
                 if (!firebase.apps.length) {
                     firebase.initializeApp(firebaseConfig);
                     console.log("✓ Firebase iniciado");
@@ -216,8 +217,11 @@
                     console.log("✓ Firebase já iniciado");
                 }
                 db = firebase.database();
+                db.ref('.info/connected').on('value', snapshot => {
+                    console.log('📶 Firebase conectado?', snapshot.val());
+                });
             } catch (e) {
-                console.error("❌ Erro ao iniciar Firebase:", e.message);
+                console.error("❌ Erro ao iniciar Firebase:", e.message, e);
                 mostrarErro("Firebase não configurado. Veja o console para detalhes.");
             }
         }
@@ -270,9 +274,11 @@
             }
             console.log('🔄 Carregando acessos do Firebase...');
 
-            db.ref('acessos').once('value', (snapshot) => {
-                const dados = snapshot.val() || {};
-                const acessosArray = Object.values(dados).sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+            db.ref('acessos').once('value')
+                .then((snapshot) => {
+                    console.log('📥 Recebido snapshot de acessos:', snapshot.exists(), snapshot.val());
+                    const dados = snapshot.val() || {};
+                    const acessosArray = Object.values(dados).sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
                 
                 // Atualizar stats
                 const usuariosUnicos = new Set(acessosArray.map(a => a.ip)).size;
@@ -330,8 +336,10 @@
                 `).join('') : '<p class="text-slate-500 text-sm">Sem cliques ainda</p>';
 
                 document.getElementById('topCliques').innerHTML = topCliquesHTML;
-            }, (error) => {
-                console.error('❌ Erro ao ler acessos:', error);
+                return null;
+            })
+            .catch((error) => {
+                console.error('❌ Erro ao ler acessos:', error.code || error.message || error);
                 document.getElementById('listaAcessos').innerHTML = '<div class="text-center py-8 text-slate-400"><p>Erro ao carregar acessos</p></div>';
                 document.getElementById('tabelaAcessos').innerHTML = '<div class="text-center py-8 text-slate-400"><p>Erro ao carregar tabela</p></div>';
             });
