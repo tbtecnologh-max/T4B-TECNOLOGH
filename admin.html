@@ -277,13 +277,31 @@
                 document.getElementById('statConversao').textContent = taxa + '%';
                 document.getElementById('totalAcessos').textContent = acessosVisuais.length;
 
+                // Cliques mais comuns
+                const cliquesDetalhes = acessosArray.filter(a => a.tipo === 'clique');
+                const cliqueCounts = cliquesDetalhes.reduce((acc, acesso) => {
+                    const key = acesso.acao || 'Clique sem detalhe';
+                    acc[key] = (acc[key] || 0) + 1;
+                    return acc;
+                }, {});
+                const topCliquesArray = Object.entries(cliqueCounts)
+                    .sort(([, a], [, b]) => b - a)
+                    .slice(0, 5);
+
+                document.getElementById('topCliques').innerHTML = topCliquesArray.length > 0 ? topCliquesArray.map(([acao, total]) => `
+                    <div class="flex items-center justify-between rounded-2xl bg-slate-50 p-3 border border-slate-200">
+                        <span class="text-sm text-slate-700">${acao}</span>
+                        <span class="text-xs font-bold text-slate-900">${total}x</span>
+                    </div>
+                `).join('') : '<div class="text-center py-4 text-slate-400">Nenhum clique registrado</div>';
+
                 // Atualizar Lista Rápida (Últimos 15)
                 const ultimos15 = acessosArray.slice(0, 15);
                 document.getElementById('listaAcessos').innerHTML = ultimos15.length > 0 ? ultimos15.map(acesso => `
                     <div class="access-row flex justify-between items-center">
                         <div class="flex-1">
                             <p class="font-semibold text-slate-900">${acesso.tipo === 'clique' ? '🖱️ ' : '👁️ '}${acesso.acao || acesso.tipo}</p>
-                            <p class="text-xs text-slate-500">IP: ${acesso.ip || 'N/A'}</p>
+                            <p class="text-xs text-slate-500">IP: ${acesso.ip || 'N/A'} ${acesso.estado ? '• UF: ' + acesso.estado : ''}</p>
                         </div>
                         <div class="text-right">
                             <span class="status-badge status-active">${acesso.timestamp ? new Date(acesso.timestamp).toLocaleTimeString('pt-BR') : '--:--'}</span>
@@ -294,9 +312,10 @@
                 // Tabela Detalhada
                 document.getElementById('tabelaAcessos').innerHTML = acessosArray.length > 0 ? acessosArray.slice(0, 50).map((acesso, idx) => `
                     <div class="access-row">
-                        <div class="grid grid-cols-5 gap-4 items-center text-sm">
+                        <div class="grid grid-cols-6 gap-4 items-center text-sm">
                             <span class="font-semibold text-slate-900">${idx + 1}</span>
                             <span class="text-slate-600">${acesso.ip || 'N/A'}</span>
+                            <span class="text-slate-600">${acesso.estado || 'N/D'}</span>
                             <span class="text-slate-600">${acesso.acao || acesso.tipo}</span>
                             <span class="text-slate-600">${acesso.pagina || 'index.html'}</span>
                             <span class="text-slate-500 text-right">${acesso.timestamp ? new Date(acesso.timestamp).toLocaleString('pt-BR') : 'N/A'}</span>
