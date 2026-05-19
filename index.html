@@ -115,100 +115,95 @@
     </script>
     <!-- TikTok Pixel Code End -->
     
-    <!-- Firebase Realtime Database para Rastreamento -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-database-compat.js"></script>
-    
-    <script>
-    // ===== RASTREAMENTO EM TEMPO REAL =====
-    let db = null;
-    let userIP = 'N/A';
-    
-    // Obter IP do usuário
-    async function obterIP() {
-      try {
-        const response = await fetch('https://api.ipify.org?format=json');
-        const data = await response.json();
-        userIP = data.ip;
-        console.log('✅ IP obtido:', userIP);
-      } catch (e) {
-        userIP = 'Desconhecido';
-        console.log('⚠️ Não foi possível obter IP:', e.message);
-      }
-      inicializarRastreamento();
-    }
-    
-    // Inicializar Firebase
-    function inicializarRastreamento() {
-      console.log('🔌 Iniciando rastreamento Firebase...');
-      try {
-        console.log('🔢 firebase.apps.length =', firebase.apps.length);
-        // TODO: Substitua pelos valores do seu Firebase
-                const firebaseConfig = {
-                    apiKey: "AIzaSyBWAQcGpCwGf8Mqsi5vK0r_AEjaPJsQsrs",
-                    authDomain: "t4b-convites.firebaseapp.com",
-                    databaseURL: "https://t4b-convites-default-rtdb.firebaseio.com",
-                    projectId: "t4b-convites",
-                    storageBucket: "t4b-convites.firebasestorage.app",
-                    messagingSenderId: "222281787997",
-                    appId: "1:222281787997:web:35e6e25e7ad17b95acbbb4"
-                };
-        
-        if (!firebase.apps.length) {
-          firebase.initializeApp(firebaseConfig);
-        }
-        db = firebase.database();
-        
-        // Registrar acesso da página
-        registrarAcesso('acesso', 'Visitou a página principal');
-      } catch (e) {
-        console.log('⚠️ Firebase não configurado - rastreamento desativado');
-      }
-    }
-    
-    // Função para registrar acessos e cliques
-    function registrarAcesso(tipo, acao) {
-      if (!db) return;
-      
-      const novoAcesso = {
-        tipo: tipo,
-        acao: acao,
-        ip: userIP,
-        pagina: window.location.pathname || 'index.html',
-        timestamp: new Date().getTime(),
-        userAgent: navigator.userAgent,
-        referrer: document.referrer || 'direto'
+    <!-- Firebase Firestore para Rastreamento -->
+    <script type="module">
+      import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+      import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyBWAQcGpCwGf8Mqsi5vK0r_AEjaPJsQsrs",
+        authDomain: "t4b-convites.firebaseapp.com",
+        projectId: "t4b-convites",
+        storageBucket: "t4b-convites.firebasestorage.app",
+        messagingSenderId: "222281787997",
+        appId: "1:222281787997:web:35e6e25e7ad17b95acbbb4"
       };
-      
-      db.ref('acessos').push(novoAcesso).then(() => {
-        console.log('✅ Acesso registrado:', novoAcesso);
-      }).catch(e => {
-        console.log('⚠️ Erro ao registrar acesso:', e.message);
-      });
-    }
-    
-    // Rastrear cliques em links WhatsApp
-    function rastrearCliquesWhatsApp() {
-      document.querySelectorAll('a[href*="wa.me"]').forEach(link => {
-        link.addEventListener('click', function() {
-          const texto = this.textContent.trim() || this.getAttribute('title') || 'Botão WhatsApp';
-          registrarAcesso('clique', texto);
+
+      let db = null;
+      let userIP = 'N/A';
+
+      async function obterIP() {
+        try {
+          const response = await fetch('https://api.ipify.org?format=json');
+          const data = await response.json();
+          userIP = data.ip || 'Desconhecido';
+          console.log('✅ IP obtido:', userIP);
+        } catch (e) {
+          try {
+            const fallback = await fetch('https://api64.ipify.org?format=json');
+            const fallbackData = await fallback.json();
+            userIP = fallbackData.ip || 'Desconhecido';
+            console.log('✅ IP obtido fallback:', userIP);
+          } catch (fallbackError) {
+            userIP = 'Desconhecido';
+            console.log('⚠️ Não foi possível obter IP:', fallbackError.message || e.message);
+          }
+        }
+        inicializarRastreamento();
+      }
+
+      function inicializarRastreamento() {
+        console.log('🔌 Iniciando rastreamento Firebase Firestore...');
+        try {
+          const apps = getApps();
+          const app = apps.length === 0 ? initializeApp(firebaseConfig) : apps[0];
+          db = getFirestore(app);
+          registrarAcesso('visualizacao', 'Acesso à Página Inicial');
+        } catch (e) {
+          console.log('⚠️ Firebase não configurado - rastreamento desativado', e);
+        }
+      }
+
+      async function registrarAcesso(tipo, acao) {
+        if (!db) return;
+
+        const novoAcesso = {
+          tipo,
+          acao,
+          ip: userIP,
+          pagina: window.location.pathname || 'index.html',
+          timestamp: Date.now(),
+          userAgent: navigator.userAgent,
+          referrer: document.referrer || 'direto'
+        };
+
+        try {
+          await addDoc(collection(db, 'acessos'), novoAcesso);
+          console.log('✅ Acesso registrado:', novoAcesso);
+        } catch (e) {
+          console.log('⚠️ Erro ao registrar acesso:', e.message || e);
+        }
+      }
+
+      function rastrearCliquesWhatsApp() {
+        document.querySelectorAll('a[href*="wa.me"]').forEach(link => {
+          link.addEventListener('click', function() {
+            const texto = this.textContent.trim() || this.getAttribute('title') || 'Botão WhatsApp';
+            registrarAcesso('clique', texto);
+          });
         });
+      }
+
+      window.abrirSimuladorComRastreamento = function(tipo) {
+        registrarAcesso('clique', `Abrir Simulador - ${tipo}`);
+        abrirSimulador(tipo);
+      };
+
+      window.addEventListener('load', function() {
+        console.log('📲 Página carregada - iniciando rastreamento');
+        obterIP();
+        rastrearCliquesWhatsApp();
       });
-    }
-    
-    // Rastrear cliques em "Testar Interatividade"
-    window.abrirSimuladorComRastreamento = function(tipo) {
-      registrarAcesso('clique', `Abrir Simulador - ${tipo}`);
-      abrirSimulador(tipo);
-    };
-    
-    // Obter IP ao carregar página
-    window.addEventListener('load', function() {
-      console.log('📲 Página carregada - iniciando rastreamento');
-      obterIP();
-      rastrearCliquesWhatsApp();
-    });
     </script>
     
     <style>
